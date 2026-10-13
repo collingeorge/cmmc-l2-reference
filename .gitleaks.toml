@@ -1,0 +1,24 @@
+title = "cmmc-l2-reference"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "live-guid"
+description = "GUID that is not the all-zero placeholder or a Microsoft first-party client id"
+regex = '''[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'''
+[rules.allowlist]
+regexes = ['''00000000-0000-0000-0000-000000000000''', '''14d82eec-204b-4c2f-b7e8-296a70dab67e''', '''1950a258-227b-4e31-a9cf-717495945fc2''']
+
+[[rules]]
+id = "upn"
+description = "User principal name or e-mail that is not an example.com placeholder"
+regex = '''[A-Za-z0-9._%+-]+@(?!example\.com|example\.onmicrosoft\.com)[A-Za-z0-9.-]+\.[A-Za-z]{2,}'''
+
+[[rules]]
+id = "sprs-uid"
+description = "SPRS assessment UID"
+regex = '''\b(?:SB|S2)\d{8,9}\b'''
+
+[allowlist]
+paths = ['''tools/blocklist\.txt''', '''\.gitleaks\.toml''']
