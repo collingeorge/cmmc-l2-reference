@@ -1,0 +1,22 @@
+# the one file that holds your tenant's real identifiers
+config.json
+
+# never publish operational output
+Evidence/
+evidence/
+ConfigBackup/
+configbackup/
+*.log
+*.evtx
+*.csv
+*.html
+
+# local scratch
+.scratch/
+*.bak
+*.bak-*
+Thumbs.db
+desktop.ini
+
+# the blocklist names real things
+tools/blocklist.txt
