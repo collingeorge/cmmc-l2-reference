@@ -13,7 +13,7 @@ $patterns = [ordered]@{
     'UPN/e-mail' = '[A-Za-z0-9._%+-]+@(?!example\.com|example\.onmicrosoft\.com)[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
     'IPv4'   = '\b(?!127\.0\.0\.1|0\.0\.0\.0)(?:\d{1,3}\.){3}\d{1,3}\b'
     'IPv6'   = '\b(?:[0-9a-fA-F]{1,4}:){2,7}[0-9a-fA-F]{0,4}\b'
-    'CAGE'   = '(?i)\bCAGE\b[^\n]{0,20}\b[0-9A-Z]{5}\b'
+    'CAGE'   = '\bCAGE\b[^\n]{0,20}\b(?=[0-9A-Z]{5}\b)(?=[A-Z]*\d)[0-9A-Z]{5}\b'   # five upper-case alphanumerics with at least one digit, near the word CAGE
     'SPRS UID' = '\b(?:SB|S2)\d{8,9}\b'
 }
 $block = @{}
