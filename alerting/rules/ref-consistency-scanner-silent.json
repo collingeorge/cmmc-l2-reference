@@ -1,0 +1,30 @@
+{
+  "name": "ref-consistency-scanner-silent",
+  "displayName": "REF consistency scanner SILENT on an online workstation",
+  "description": "A workstation is sending heartbeats but has not written a consistency scan summary (REF event 3000) for 3 hours: the scanner, its task or the REF log collection has stopped. Standing requirement 8 Oct 2026; NIST 3.3.4.",
+  "severity": 1,
+  "enabled": true,
+  "evaluationFrequency": "PT1H",
+  "windowSize": "PT3H",
+  "autoMitigate": false,
+  "muteActionsDuration": "PT4H",
+  "criteria": {
+    "query": "let online = Heartbeat | where TimeGenerated > ago(30m) | extend Host = toupper(tostring(split(Computer, '.')[0])) | distinct Host;\nlet scanned = Event | where TimeGenerated > ago(3h) and EventLog == 'REF' and Source == 'REF-Consistency' and EventID == 3000 | extend Host = toupper(tostring(split(Computer, '.')[0])) | distinct Host;\nonline | join kind=leftanti scanned on Host",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": [
+      {
+        "name": "Host",
+        "operator": "Include",
+        "values": [
+          "*"
+        ]
+      }
+    ]
+  }
+}

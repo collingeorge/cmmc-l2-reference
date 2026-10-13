@@ -1,0 +1,22 @@
+{
+  "name": "ref-service-drift",
+  "displayName": "REF - Critical service drift or restart failure",
+  "description": "Watchdog event 1000 (a critical service drifted from its enforced state) or 1001 (a critical service could not be restarted). Routine dmwappushservice demand-start cycling is excluded from 1000; 1001 is never excluded.",
+  "severity": 0,
+  "enabled": true,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT10M",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "Event | where ingestion_time() > ago(5m) | where EventLog == \"REF\" | where EventID in (1000, 1001) | where not(EventID == 1000 and RenderedDescription has \"dmwappushservice\") | extend LocalTime = format_datetime(datetime_utc_to_local(TimeGenerated,\"America/Los_Angeles\"),\"yyyy-MM-dd HH:mm:ss\") | project LocalTime, Computer, EventID, Detail=substring(RenderedDescription,0,600)",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

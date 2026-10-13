@@ -43,7 +43,7 @@ The 110 requirements are the same in all three. CMMC Level 2 *is* NIST SP 800-17
 
 ## 3. What you need to have — the plain-language version
 
-Sanctir's system is one Microsoft 365 tenant (Business Premium licensing with Entra ID P2, Intune, Defender), Microsoft Sentinel for logging, and company-owned Windows 11 laptops plus a managed iPhone. Everything below is enforced from the tenant; nothing depends on a setting someone remembered to make on a laptop.
+Sanctir's system is one Microsoft 365 **E5** tenant (which bundles Entra ID P2, Intune, Defender for Endpoint Plan 2 and Purview), Microsoft Sentinel for logging, Cloudflare Zero Trust for the network path, and company-owned Windows 11 laptops plus a managed iPhone. Why E5 and not a cheaper plan, and what each part does, is in `docs/explainers/03-why-this-stack.md`. Everything below is enforced from the tenant; nothing depends on a setting someone remembered to make on a laptop.
 
 1. **Identity.** Everyone signs in with a hardware security key (FIDO2; Sanctir uses FIPS-validated YubiKeys). No passwords in daily use, no "approve this sign-in" phone prompts, no codes from an app. Administration is done from a separate admin account that gets its rights for a few hours at a time (Privileged Identity Management) and loses them again. One sealed "break-glass" account exists for emergencies, and every sign-in by it raises an alert.
 2. **Devices.** Laptops are enrolled in Intune and get their entire configuration from it: disk encryption, firewall, antivirus settings, what programs may run (App Control), screen lock, what happens when the lid closes, which ports and services are off. If anything is changed by hand on the laptop, a scheduled check puts it back within minutes and records that it did.

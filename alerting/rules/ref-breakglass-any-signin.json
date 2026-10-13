@@ -1,0 +1,22 @@
+{
+  "name": "ref-breakglass-any-signin",
+  "displayName": "REF - Break-glass account used (any sign-in, any device)",
+  "description": "Any interactive or non-interactive sign-in attempt by the emergency-access account ea01, or any Windows logon by it on any workstation. Added 12 Oct 2026 (RA-027): the Purview break-glass policy sees interactive sign-ins only and missed the 10 Oct Windows sign-in, which reached Entra as non-interactive sign-ins. Every use must be recorded with its reason (PLN-007). NIST 3.1.5, 3.3.1, 3.6.1.",
+  "severity": 0,
+  "enabled": true,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT6H",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "let bg = dynamic([\"ea01@example.onmicrosoft.com\"]);\nunion isfuzzy=true\n (SigninLogs | where ingestion_time() > ago(6m) | where UserPrincipalName in~ (bg) | extend D = parse_json(tostring(DeviceDetail)), L = parse_json(tostring(LocationDetails)) | project TimeGenerated, Kind = \"interactive sign-in\", App = AppDisplayName, IPAddress, Place = strcat(tostring(L.city), \", \", tostring(L.countryOrRegion)), Device = tostring(D.displayName), Result = tostring(ResultType)),\n (AADNonInteractiveUserSignInLogs | where ingestion_time() > ago(6m) | where UserPrincipalName in~ (bg) | extend D = parse_json(tostring(DeviceDetail)), L = parse_json(tostring(LocationDetails)) | project TimeGenerated, Kind = \"non-interactive sign-in\", App = AppDisplayName, IPAddress, Place = strcat(tostring(L.city), \", \", tostring(L.countryOrRegion)), Device = tostring(D.displayName), Result = tostring(ResultType)),\n (SecurityEvent | where ingestion_time() > ago(6m) | where EventID in (4624, 4625, 4648) | where TargetUserName has \"ea01\" | project TimeGenerated, Kind = strcat(\"Windows logon event \", EventID), App = LogonProcessName, IPAddress = IpAddress, Place = Computer, Device = Computer, Result = tostring(Status))\n| summarize Events = count(), First = min(TimeGenerated), Last = max(TimeGenerated), Kinds = make_set(Kind), Apps = make_set(App, 10), IPs = make_set(IPAddress, 5), Places = make_set(Place, 5), Devices = make_set(Device, 5)\n| where Events > 0\n| extend Problem = strcat(\"Break-glass account ea01 used: \", Events, \" sign-in event(s) \", tostring(Kinds), \" on \", tostring(Devices), \" from \", tostring(IPs), \". Every use must be recorded with its reason (PLN-007); if it was not you, treat as an incident now.\")",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

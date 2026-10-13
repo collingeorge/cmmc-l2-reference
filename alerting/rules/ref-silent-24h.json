@@ -1,0 +1,30 @@
+{
+  "name": "ref-silent-24h",
+  "displayName": "REF - workstation silent for 24 hours",
+  "description": "Per computer: no heartbeat for 24 hours. Expected while a machine is switched off; one notification, resolves when it reports again. Backstop for a machine whose agent is stopped and never returns. NIST 3.3.4.",
+  "severity": 2,
+  "enabled": true,
+  "evaluationFrequency": "PT1H",
+  "windowSize": "P2D",
+  "autoMitigate": true,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "let expected = union (datatable(Computer:string)[\"WS01\", \"WS02\"]), (Heartbeat | where TimeGenerated > ago(2d) | distinct Computer) | extend Computer = toupper(tostring(split(Computer, '.')[0])) | distinct Computer;\nlet seen = Heartbeat | where TimeGenerated > ago(24h) | extend Computer = toupper(tostring(split(Computer, '.')[0])) | distinct Computer;\nexpected | join kind=leftanti seen on Computer | extend Problem = strcat(Computer, ' has sent no telemetry for over 24 hours. Expected if it is switched off; otherwise investigate.')",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": [
+      {
+        "name": "Computer",
+        "operator": "Include",
+        "values": [
+          "*"
+        ]
+      }
+    ]
+  }
+}

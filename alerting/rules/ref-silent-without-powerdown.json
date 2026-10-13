@@ -1,0 +1,30 @@
+{
+  "name": "ref-silent-without-powerdown",
+  "displayName": "REF - workstation was silent WITHOUT a sleep or shutdown, or its upload stalled",
+  "description": "Per computer, evaluated when a machine reports again: a telemetry gap over 20 minutes with no sleep, hibernate or shutdown event at its start, or at least 10 heartbeats arriving over an hour late (upload stalled while awake). Replaces the real-time silence alerts, which cannot tell asleep from broken because power-down events reach the workspace only after wake (measured 9 Oct 2026). NIST 3.3.4, 3.14.6.",
+  "severity": 1,
+  "enabled": true,
+  "evaluationFrequency": "PT15M",
+  "windowSize": "P2D",
+  "autoMitigate": false,
+  "muteActionsDuration": "PT1H",
+  "criteria": {
+    "query": "let hb = Heartbeat | where TimeGenerated > ago(2d) | extend Arrived = ingestion_time() | project Computer, TimeGenerated, Arrived;\nlet gaps = hb | order by Computer asc, TimeGenerated asc | extend Prev = prev(TimeGenerated), PrevC = prev(Computer)\n  | where Computer == PrevC and datetime_diff('minute', TimeGenerated, Prev) > 20 and Arrived between (ago(30m) .. ago(15m))\n  | project Computer, GapStart = Prev, GapEnd = TimeGenerated, GapMin = datetime_diff('minute', TimeGenerated, Prev);\nlet power = Event | where TimeGenerated > ago(2d) and EventLog == 'System'\n  | where (Source == 'Microsoft-Windows-Kernel-Power' and EventID in (42, 506, 109)) or (Source == 'User32' and EventID == 1074) or (Source == 'EventLog' and EventID == 6006)\n  | project Computer, PowerAt = TimeGenerated;\nlet unexplained = gaps | join kind=leftouter power on Computer\n  | extend Hit = iff(isnotnull(PowerAt) and PowerAt between ((GapStart - 10m) .. (GapStart + 15m)), 1, 0)\n  | summarize PowerEvents = sum(Hit) by Computer, GapStart, GapEnd, GapMin | where PowerEvents == 0\n  | project Computer, Kind = 'silent without a sleep, hibernate or shutdown', Minutes = GapMin, From = GapStart, To = GapEnd;\nlet stalled = hb | where Arrived between (ago(30m) .. ago(15m)) and datetime_diff('minute', Arrived, TimeGenerated) > 60\n  | summarize Late = count(), From = min(TimeGenerated), To = max(TimeGenerated), Minutes = max(datetime_diff('minute', Arrived, TimeGenerated)) by Computer | where Late >= 10\n  | project Computer, Kind = strcat('upload stalled while awake (', Late, ' heartbeats over an hour late)'), Minutes, From, To;\nunion unexplained, stalled\n| extend Problem = strcat(Computer, ': ', Kind, ', ', Minutes, ' minutes (', format_datetime(datetime_utc_to_local(From, 'America/Los_Angeles'), 'MM-dd HH:mm'), ' to ', format_datetime(datetime_utc_to_local(To, 'America/Los_Angeles'), 'MM-dd HH:mm'), ' local). Investigate: agent stopped, network blocked, or tampering.')",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": [
+      {
+        "name": "Computer",
+        "operator": "Include",
+        "values": [
+          "*"
+        ]
+      }
+    ]
+  }
+}

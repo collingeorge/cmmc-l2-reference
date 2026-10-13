@@ -1,0 +1,22 @@
+{
+  "name": "ref-audit-tamper",
+  "displayName": "REF - Audit log or audit policy tampering",
+  "description": "Security log cleared (1102), event logging service shut down (1100), or any event log cleared (System 104) - never filtered. Audit policy change (4719) only when made by a named account; MDM re-applying tenant audit policy as the machine account generates one event per subcategory, 54 at a time, and is excluded.",
+  "severity": 0,
+  "enabled": true,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT10M",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "union isfuzzy=true (SecurityEvent | where ingestion_time() > ago(5m) | where EventID in (1100, 1102) | project TimeGenerated, Computer, EventID, Activity, Actor=SubjectUserName), (SecurityEvent | where ingestion_time() > ago(5m) | where EventID == 4719 | where SubjectUserName !endswith \"$\" | project TimeGenerated, Computer, EventID, Activity, Actor=SubjectUserName), (Event | where ingestion_time() > ago(5m) | where EventLog == \"System\" and EventID == 104 and Source == \"Microsoft-Windows-Eventlog\" | project TimeGenerated, Computer, EventID, Activity=substring(RenderedDescription,0,200), Actor=UserName) | extend LocalTime = format_datetime(datetime_utc_to_local(TimeGenerated,\"America/Los_Angeles\"),\"yyyy-MM-dd HH:mm:ss\") | project LocalTime, Computer, EventID, Activity, Actor\n| where EventID != 1100   // RA-027 12 Oct: 1100 = orderly shutdown; a killed log service writes none (silence rule covers it)",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

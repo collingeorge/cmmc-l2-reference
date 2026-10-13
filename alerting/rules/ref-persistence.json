@@ -1,0 +1,22 @@
+{
+  "name": "ref-persistence",
+  "displayName": "REF - Persistence mechanism created or changed",
+  "description": "Scheduled task created, deleted, enabled or updated (4698/4699/4700/4702), or a service installed or its start type changed (System 7045/7040). Windows updating its own tasks under \\Microsoft\\ as SYSTEM or NETWORK SERVICE is excluded from 4702 only; task creation and deletion are never excluded.",
+  "severity": 1,
+  "enabled": true,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT10M",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "union isfuzzy=true (SecurityEvent | where ingestion_time() > ago(5m) | where EventID in (4698, 4699, 4700, 4701, 4702) | extend Task = extract('<Data Name=\"TaskName\">([^<]*)', 1, EventData), ActorSid = iff(isnotempty(SubjectUserSid), SubjectUserSid, extract('<Data Name=\"SubjectUserSid\">([^<]*)', 1, EventData)) | where not(ActorSid in (\"S-1-5-18\",\"S-1-5-19\",\"S-1-5-20\") and Task startswith @\"\\Microsoft\\\") | where not(Task matches regex @\"^\\\\SoftLanding\\\\S-1-[0-9-]+\\\\SoftLanding(Deferral|Trigger)Task-\") | where not(EventID == 4702 and ActorSid == \"S-1-5-18\" and (Task startswith @\"\\REF-\" or Task startswith @\"\\MicrosoftEdgeUpdateTask\")) | project TimeGenerated, Computer, EventID, Activity, Actor=SubjectUserName, Detail=Task), (Event | where ingestion_time() > ago(5m) | where EventLog == \"System\" and EventID == 7045 | project TimeGenerated, Computer, EventID, Activity=substring(RenderedDescription,0,400), Actor=UserName, Detail=Source), (Event | where ingestion_time() > ago(5m) | where EventLog == \"System\" and EventID == 7040 | where not(UserName in~ (\"NT AUTHORITY/SYSTEM\",\"NT AUTHORITY\\\\SYSTEM\",\"NT AUTHORITY/NETWORK SERVICE\",\"NT AUTHORITY\\\\NETWORK SERVICE\") and RenderedDescription has_any (\"Background Intelligent Transfer Service\",\"Microsoft Account Sign-in Assistant\",\"Delivery Optimization\",\"IsolationSession\",\"Windows Modules Installer\",\"Defender Update Service\")) | project TimeGenerated, Computer, EventID, Activity=substring(RenderedDescription,0,400), Actor=UserName, Detail=Source) | extend LocalTime = format_datetime(datetime_utc_to_local(TimeGenerated,\"America/Los_Angeles\"),\"yyyy-MM-dd HH:mm:ss\") | project LocalTime, Computer, EventID, Activity, Actor, Detail\n| where not(EventID == 7040 and (Activity has_any (\"start type of the Claude service\", \"start type of the ChatGPT service\") or (Actor == \"S-1-5-18\" and Activity has \"Microsoft Account Sign-in Assistant\"))) | where not(EventID == 7045 and Activity has @\"system32\\drivers\\wd\\\")   // RA-027 12 Oct",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

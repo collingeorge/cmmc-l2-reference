@@ -1,0 +1,22 @@
+{
+  "name": "ref-privesc",
+  "displayName": "REF - Privilege or account change",
+  "description": "Account created, enabled or changed; password reset; added to a privileged group; user right or system security access granted.",
+  "severity": 1,
+  "enabled": true,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT10M",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "SecurityEvent | where ingestion_time() > ago(5m) | where EventID in (4704, 4717, 4720, 4722, 4724, 4728, 4732, 4735, 4738, 4756) | extend LocalTime = format_datetime(datetime_utc_to_local(TimeGenerated,\"America/Los_Angeles\"),\"yyyy-MM-dd HH:mm:ss\") | project LocalTime, Computer, EventID, Activity, Actor=SubjectUserName, TargetAccount=TargetUserName, Member=MemberName\n| where not(Actor endswith \"$\" and (EventID == 4717 or (TargetAccount == \"WsiAccount\" and EventID in (4722, 4724, 4738)) or (TargetAccount == \"la-admin\" and EventID in (4724, 4738))))   // RA-027 12 Oct: Web Sign-in account, LAPS rotation, policy user rights",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

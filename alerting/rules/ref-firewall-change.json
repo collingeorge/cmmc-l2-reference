@@ -1,0 +1,22 @@
+{
+  "name": "ref-firewall-change",
+  "displayName": "REF - Firewall rule changes (hourly summary)",
+  "description": "Windows Firewall rule added, modified or deleted, setting or policy changed, or active profile switched (4946/4947/4948/4950/4954/4956), summarised once per hour per machine. Measured at 413 events in 24 hours, driven by Intune re-applying 81 tenant rules; per-event alerting is not usable. The firewall service itself stopping is covered separately by the critical service drift rule.",
+  "severity": 2,
+  "enabled": true,
+  "evaluationFrequency": "PT1H",
+  "windowSize": "PT1H",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "SecurityEvent | where ingestion_time() > ago(1h) | where EventID in (4946, 4947, 4948, 4950, 4954, 4956) | extend Rule = extract('<Data Name=\"RuleName\">([^<]*)', 1, EventData) | where not(EventID in (4946, 4947, 4948) and (Rule startswith \"CUI Allow \" or Rule startswith \"LpacSense\")) | summarize RulesAdded=countif(EventID==4946), RulesModified=countif(EventID==4947), RulesDeleted=countif(EventID==4948), SettingChanged=countif(EventID==4950), PolicySettingsChanged=countif(EventID==4954), ActiveProfileChanged=countif(EventID==4956), Rules=make_set(Rule, 10) by Computer | extend LocalTime = format_datetime(datetime_utc_to_local(now(),\"America/Los_Angeles\"),\"yyyy-MM-dd HH:mm\") | project LocalTime, Computer, RulesAdded, RulesModified, RulesDeleted, SettingChanged, PolicySettingsChanged, ActiveProfileChanged, Rules",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

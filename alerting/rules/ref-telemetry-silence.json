@@ -1,0 +1,30 @@
+{
+  "name": "ref-telemetry-silence",
+  "displayName": "REF - a workstation has stopped reporting",
+  "description": "Returns a row for each expected workstation that has not sent a heartbeat in fifteen minutes. Silence is treated as an event: an agent killed, a network cut or a machine powered off all produce the same absence of data. Raised after WS02 stopped reporting for over an hour on 26 September 2026 while in active use, unnoticed.",
+  "severity": 1,
+  "enabled": false,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT15M",
+  "autoMitigate": true,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "let seen = Heartbeat | where TimeGenerated > ago(15m) | summarize by Computer; datatable(Computer:string)[\"WS01\",\"WS02\"] | where Computer !in (seen) | extend Problem = strcat(Computer, \" has sent no telemetry in 15 minutes\")",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": [
+      {
+        "name": "Computer",
+        "operator": "Include",
+        "values": [
+          "*"
+        ]
+      }
+    ]
+  }
+}

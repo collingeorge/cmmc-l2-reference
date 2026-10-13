@@ -1,0 +1,30 @@
+{
+  "name": "ref-telemetry-silence-escalation",
+  "displayName": "REF - ESCALATION a workstation has been silent for over an hour",
+  "description": "Escalation tier for sqr-REF-telemetry-silence. Azure Monitor deduplicates while an alert remains Fired, so a condition lasting hours yields exactly one notification from the 15-minute rule. This separate rule fires independently at one hour at Severity 0. Raised 28 Sep 2026 after WS01 was silent for 4.5 hours, the 15-minute alert fired correctly at 16 minutes, and nothing further was sent.",
+  "severity": 0,
+  "enabled": false,
+  "evaluationFrequency": "PT15M",
+  "windowSize": "PT1H",
+  "autoMitigate": true,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "let seen = Heartbeat | where TimeGenerated > ago(60m) | summarize by Computer; datatable(Computer:string)[\"WS01\",\"WS02\"] | where Computer !in (seen) | extend Problem = strcat(Computer, \" has sent NO telemetry for over ONE HOUR. The 15-minute alert already fired and was not acted on. Audit records are not reaching the workspace.\")",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": [
+      {
+        "name": "Computer",
+        "operator": "Include",
+        "values": [
+          "*"
+        ]
+      }
+    ]
+  }
+}

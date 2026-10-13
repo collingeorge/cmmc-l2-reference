@@ -1,0 +1,22 @@
+{
+  "name": "ref-defense-change",
+  "displayName": "REF - Defender protection disabled or configuration changed",
+  "description": "Defender protection disabled, configuration changed, or Tamper Protection blocked a change. Exclusions, all measured not assumed: 5013 for the three values left tattooed by the deleted REF-SecurityBaseline (POAM-024), and 5007 for Defender housekeeping - UX Configuration notification triggers and the LastMAPSFailureTime timestamp fields, which record state rather than change it. 5007 on any actual protection setting still alerts, as does every other Tamper Protection block.",
+  "severity": 1,
+  "enabled": true,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT10M",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "Event | where ingestion_time() > ago(5m) | where EventLog == \"Microsoft-Windows-Windows Defender/Operational\" | where EventID in (5001, 5004, 5007, 5010, 5012, 5013) | where not(EventID == 5013 and RenderedDescription has_any (\"DisableBlockAtFirstSeen\",\"DisableRoutinelyTakingAction\",\"DisableScanOnRealtimeEnable\")) | where not(EventID == 5007 and RenderedDescription has_any (\"UX Configuration\",\"LastMAPSFailureTimeString\",\"LastMAPSFailureTime\",\"\\\\Diagnostics\\\\\",\"IsServiceRunning\",\"ServiceStartStates\",\"WdConfigHash\",\"InitializingComponentProgress\",\"LastSignatureUpdateResult\",\"DLP Configs\\\\Tag\")) | extend OldV = extract(@\"Old value:.*?=\\s*(\\S+)\", 1, RenderedDescription), NewV = extract(@\"New value:.*?=\\s*(\\S+)\", 1, RenderedDescription) | where not(EventID == 5007 and isnotempty(OldV) and OldV == NewV) | extend LocalTime = format_datetime(datetime_utc_to_local(TimeGenerated,\"America/Los_Angeles\"),\"yyyy-MM-dd HH:mm:ss\") | project LocalTime, Computer, EventID, Actor=UserName, Detail=substring(RenderedDescription,0,400)\n| where not(EventID == 5007 and Detail matches regex @\"New value:.*SpyNetReporting\\s*=\\s*0x2\")   // RA-027 12 Oct: MAPS re-set to the policy value at service start",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

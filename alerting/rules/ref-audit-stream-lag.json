@@ -1,0 +1,30 @@
+{
+  "name": "ref-audit-stream-lag",
+  "displayName": "REF - Security audit stream lagging on an online workstation",
+  "description": "Per computer: the machine has sent a heartbeat in the last 15 minutes but its newest Security event in the workspace is more than 60 minutes old (or none in 2 hours). Catches a partial pipeline failure or a suppressed audit stream that the heartbeat-based silence alerts cannot see. Raised 8 Oct 2026 after WS01 heartbeats resumed while its Security events lagged. NIST 3.3.1, 3.3.4.",
+  "severity": 1,
+  "enabled": true,
+  "evaluationFrequency": "PT15M",
+  "windowSize": "PT2H",
+  "autoMitigate": true,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "let online = Heartbeat | where TimeGenerated > ago(15m) | extend Host = toupper(tostring(split(Computer, '.')[0])) | distinct Host;\nlet sec = SecurityEvent | where TimeGenerated > ago(2h) | extend Host = toupper(tostring(split(Computer, '.')[0])) | summarize LastSecurity = max(TimeGenerated) by Host;\nonline | join kind=leftouter sec on Host\n| where isnull(LastSecurity) or LastSecurity < ago(60m)\n| extend LagMinutes = iff(isnull(LastSecurity), 120, datetime_diff('minute', now(), LastSecurity)), Problem = strcat(Host, ' is online but its Security audit is not reaching the workspace (newest Security event ', iff(isnull(LastSecurity), 'none in 2 hours', strcat(tostring(datetime_diff('minute', now(), LastSecurity)), ' minutes old')), ')')\n| project Host, LastSecurity, LagMinutes, Problem",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": [
+      {
+        "name": "Host",
+        "operator": "Include",
+        "values": [
+          "*"
+        ]
+      }
+    ]
+  }
+}

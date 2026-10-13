@@ -1,0 +1,22 @@
+{
+  "name": "ref-logon",
+  "displayName": "REF - Interactive logon",
+  "description": "Human console, unlock, RDP or cached logon on WS01 or WS02.",
+  "severity": 3,
+  "enabled": true,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT10M",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "SecurityEvent | where ingestion_time() > ago(5m) | where EventID == 4624 | where LogonType in (2, 7, 10, 11) | where TargetUserName !endswith \"$\" | where TargetUserName !in~ (\"SYSTEM\",\"LOCAL SERVICE\",\"NETWORK SERVICE\",\"ANONYMOUS LOGON\",\"UMFD-0\",\"UMFD-1\",\"DWM-1\",\"DWM-2\",\"DWM-3\") | where not(LogonType in (2, 7, 11) and TargetDomainName =~ \"AzureAD\" and TargetUserName in~ (\"SecurityOfficer\",\"user@example.com\",\"cgeorge\")) | extend LocalTime = format_datetime(datetime_utc_to_local(TimeGenerated,\"America/Los_Angeles\"),\"yyyy-MM-dd HH:mm:ss\") | project LocalTime, Computer, Account=TargetUserName, Domain=TargetDomainName, LogonType, IpAddress, Process=LogonProcessName\n| where not(Domain in (\"Window Manager\", \"Font Driver Host\") and (Account startswith \"DWM-\" or Account startswith \"UMFD-\"))   // RA-027 12 Oct: all numbered system sessions\n| where not(Account =~ \"WsiAccount\" and LogonType == 2 and IpAddress in (\"127.0.0.1\", \"::1\"))   // RA-027 pass 3: Web Sign-in host at every unlock",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

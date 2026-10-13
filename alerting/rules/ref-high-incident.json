@@ -1,0 +1,22 @@
+{
+  "name": "ref-high-incident",
+  "displayName": "REF - any new security incident",
+  "description": "Fires on every new Microsoft Sentinel incident regardless of severity. Notifies the Security Officer by email and SMS.",
+  "severity": 1,
+  "enabled": true,
+  "evaluationFrequency": "PT5M",
+  "windowSize": "PT10M",
+  "autoMitigate": false,
+  "muteActionsDuration": null,
+  "criteria": {
+    "query": "SecurityIncident | where TimeGenerated > ago(10m) | where Status == \"New\" | project TimeGenerated, IncidentNumber, Title, Severity, IncidentUrl",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": null
+  }
+}

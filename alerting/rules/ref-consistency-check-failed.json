@@ -1,0 +1,30 @@
+{
+  "name": "ref-consistency-check-failed",
+  "displayName": "REF consistency check FAILED on a workstation",
+  "description": "A REF consistency scan reported a FAIL (REF event 3002). The alert lists the failed checks per computer; the full results are in the REF event log and C:\\ProgramData\\REF\\Reports\\consistency-latest.json. Standing requirement 8 Oct 2026; NIST 3.3.4, 3.14.6.",
+  "severity": 1,
+  "enabled": true,
+  "evaluationFrequency": "PT1H",
+  "windowSize": "PT1H",
+  "autoMitigate": false,
+  "muteActionsDuration": "PT4H",
+  "criteria": {
+    "query": "Event\n| where EventLog == 'REF' and Source == 'REF-Consistency' and EventID == 3002\n| extend Check = trim(' ', extract('CHECK=([^|]+)', 1, RenderedDescription)), Detail = extract('DETAIL=(.*)$', 1, RenderedDescription)\n| summarize Failures = count(), Checks = make_set(Check, 25), Example = take_any(Detail), Last = max(TimeGenerated) by Computer",
+    "timeAggregation": "Count",
+    "operator": "GreaterThan",
+    "threshold": 0.0,
+    "failingPeriods": {
+      "minFailingPeriodsToAlert": 1,
+      "numberOfEvaluationPeriods": 1
+    },
+    "dimensions": [
+      {
+        "name": "Computer",
+        "operator": "Include",
+        "values": [
+          "*"
+        ]
+      }
+    ]
+  }
+}
