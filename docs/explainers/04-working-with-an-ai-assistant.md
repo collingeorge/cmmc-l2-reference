@@ -11,9 +11,13 @@ NIST SP 800-171 is 110 requirements and 320 objectives, scored against DoD's met
 3. **It keeps the records.** Every change got a dated register entry with the evidence file and the way back; every finding got a number, an owner and a status. That bookkeeping is most of what an assessor asks for and is exactly what a busy owner skips.
 4. **It never gets tired of the method.** Read-only first; back up before writing; read back after; one change, one window, one machine; refuse if the precondition is not met. The scripts here encode those habits because the assistant was told to encode them, every time.
 
+## What it costs and how to start
+
+A standard Claude subscription that includes Claude Code is all it took; no enterprise agreement, no integration project. Install the desktop app, give it this repository, and it will read every script, policy and explainer here before you ask your first question. From there it speeds up three things in particular: **implementation** (it adapts the deploy scripts to your `config.json`, runs them read-only, shows you the plan, and applies on your word), **testing** (it reads the evidence files the scripts produce and tells you what passed, what is pending and what failed, in plain language), and **production deployment** (it walks the build order in `02-build-order.md` step by step, with the read-back after each step, so nothing is switched on before it has been read). What took Sanctir six weeks of evenings with the assistant doing the reading would have taken months without it, and the method it was held to is what made the result safe.
+
 ## How to connect it
 
-1. Install the Claude desktop app and open the **Code** tab in the folder where you keep this repository and your own records.
+1. Install the Claude desktop app and open the **Code** tab in a folder that holds a clone of this repository (download the ZIP from GitHub and extract it if you do not use Git) and your own records.
 2. Give it the rules in the next section as standing instructions (the app keeps a memory per project; the first thing to put in it is the rules).
 3. Work in two windows: the assistant's, and a PowerShell 7 window that **you** run as the admin account with your security key. The assistant writes a script; you run it; you paste the output back. The assistant never holds a token, a password or a key. The sign-in helper in `scripts/Connect-Tenant.ps1` is built for exactly this: it signs in on your machine, in your window, and the assistant only ever sees what you paste.
 4. For portals (Intune, Entra, SPRS, Cloudflare), the app's built-in browser pane lets the assistant *read* a page you have signed in to and fill in non-secret fields for you to check; the sign-in, the consent banner and the submit button stay yours.
