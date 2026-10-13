@@ -1,0 +1,54 @@
+{
+  "conditions": {
+    "applications": {
+      "applicationFilter": null,
+      "excludeApplications": [],
+      "includeApplications": [
+        "All"
+      ],
+      "includeAuthenticationContextClassReferences": [],
+      "includeUserActions": []
+    },
+    "authenticationFlows": null,
+    "clientApplications": null,
+    "clientAppTypes": [
+      "all"
+    ],
+    "devices": null,
+    "insiderRiskLevels": null,
+    "locations": null,
+    "platforms": null,
+    "servicePrincipalRiskLevels": [],
+    "signInRiskLevels": [],
+    "userRiskLevels": [],
+    "users": {
+      "excludeGroups": [],
+      "excludeGuestsOrExternalUsers": null,
+      "excludeRoles": [],
+      "excludeUsers": [
+        "<excludeUsers-from-config>"
+      ],
+      "includeGroups": [],
+      "includeGuestsOrExternalUsers": null,
+      "includeRoles": [],
+      "includeUsers": [
+        "All"
+      ]
+    }
+  },
+  "deletedDateTime": null,
+  "displayName": "REF-CA-SessionControls",
+  "grantControls": null,
+  "sessionControls": {
+    "applicationEnforcedRestrictions": null,
+    "cloudAppSecurity": null,
+    "disableResilienceDefaults": null,
+    "persistentBrowser": {
+      "isEnabled": true,
+      "mode": "never"
+    },
+    "secureSignInSession": null,
+    "signInFrequency": null
+  },
+  "state": "enabled"
+}

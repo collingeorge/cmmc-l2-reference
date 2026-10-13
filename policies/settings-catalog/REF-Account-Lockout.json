@@ -1,0 +1,24 @@
+{
+  "name": "REF-Account-Lockout",
+  "description": "Account lockout (NIST 800-171 3.1.8): lock after 10 failed attempts for 15 minutes, counter resets after 15 minutes. Added 1 Oct 2026: the tenant carried no lockout setting and both endpoints were at the Windows default of 10 minutes.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_devicelock_accountlockoutpolicy",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingValue": {
+        "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+        "settingValueTemplateReference": null,
+        "value": "AccountLockoutDuration:15, AccountLockoutThreshold:3, ResetAccountLockoutCounterAfter:15"
+      }
+    }
+  ]
+}

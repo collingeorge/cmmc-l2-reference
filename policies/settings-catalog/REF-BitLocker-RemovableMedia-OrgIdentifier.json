@@ -1,0 +1,45 @@
+{
+  "name": "REF-BitLocker-RemovableMedia-OrgIdentifier",
+  "description": "Sets the BitLocker organisation identification field to SANCTIR-CMMC-L2. Paired with cross-org deny so only organisation-encrypted removable media is writable. Supports NIST SP 800-171 3.8.7.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_bitlocker_identificationfield_identificationfield",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+              "settingValueTemplateReference": null,
+              "value": "SANCTIR-CMMC-L2"
+            }
+          },
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_bitlocker_identificationfield_secidentificationfield",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+              "settingValueTemplateReference": null,
+              "value": "SANCTIR-CMMC-L2"
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_bitlocker_identificationfield_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_bitlocker_identificationfield",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

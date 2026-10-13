@@ -1,0 +1,59 @@
+{
+  "conditions": {
+    "applications": {
+      "applicationFilter": null,
+      "excludeApplications": [],
+      "includeApplications": [
+        "All"
+      ],
+      "includeAuthenticationContextClassReferences": [],
+      "includeUserActions": []
+    },
+    "authenticationFlows": null,
+    "clientApplications": null,
+    "clientAppTypes": [
+      "browser"
+    ],
+    "devices": null,
+    "insiderRiskLevels": null,
+    "locations": null,
+    "platforms": {
+      "excludePlatforms": [],
+      "includePlatforms": [
+        "iOS",
+        "android",
+        "windowsPhone"
+      ]
+    },
+    "servicePrincipalRiskLevels": [],
+    "signInRiskLevels": [],
+    "userRiskLevels": [],
+    "users": {
+      "excludeGroups": [],
+      "excludeGuestsOrExternalUsers": null,
+      "excludeRoles": [],
+      "excludeUsers": [
+        "<excludeUsers-from-config>"
+      ],
+      "includeGroups": [],
+      "includeGuestsOrExternalUsers": null,
+      "includeRoles": [],
+      "includeUsers": [
+        "All"
+      ]
+    }
+  },
+  "deletedDateTime": null,
+  "displayName": "REF-CA-MobileBrowser-RequireCompliant",
+  "grantControls": {
+    "authenticationStrength": null,
+    "builtInControls": [
+      "compliantDevice"
+    ],
+    "customAuthenticationFactors": [],
+    "operator": "OR",
+    "termsOfUse": []
+  },
+  "sessionControls": null,
+  "state": "enabled"
+}

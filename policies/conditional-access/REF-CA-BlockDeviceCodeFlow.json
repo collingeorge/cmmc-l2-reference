@@ -1,0 +1,54 @@
+{
+  "conditions": {
+    "applications": {
+      "applicationFilter": null,
+      "excludeApplications": [],
+      "includeApplications": [
+        "All"
+      ],
+      "includeAuthenticationContextClassReferences": [],
+      "includeUserActions": []
+    },
+    "authenticationFlows": {
+      "transferMethods": "deviceCodeFlow,authenticationTransfer"
+    },
+    "clientApplications": null,
+    "clientAppTypes": [
+      "all"
+    ],
+    "devices": null,
+    "insiderRiskLevels": null,
+    "locations": null,
+    "platforms": null,
+    "servicePrincipalRiskLevels": [],
+    "signInRiskLevels": [],
+    "userRiskLevels": [],
+    "users": {
+      "excludeGroups": [],
+      "excludeGuestsOrExternalUsers": null,
+      "excludeRoles": [],
+      "excludeUsers": [
+        "<excludeUsers-from-config>"
+      ],
+      "includeGroups": [],
+      "includeGuestsOrExternalUsers": null,
+      "includeRoles": [],
+      "includeUsers": [
+        "All"
+      ]
+    }
+  },
+  "deletedDateTime": null,
+  "displayName": "REF-CA-BlockDeviceCodeFlow",
+  "grantControls": {
+    "authenticationStrength": null,
+    "builtInControls": [
+      "block"
+    ],
+    "customAuthenticationFactors": [],
+    "operator": "OR",
+    "termsOfUse": []
+  },
+  "sessionControls": null,
+  "state": "enabled"
+}

@@ -1,0 +1,40 @@
+{
+  "@odata.type": "#microsoft.graph.iosDeviceFeaturesConfiguration",
+  "airPrintDestinations": [],
+  "assetTagTemplate": null,
+  "contentFilterSettings": null,
+  "description": "Microsoft Enterprise SSO plug-in (single sign-on app extension, Microsoft Entra ID) so that Safari and Safari views on managed iPhones and iPads present the device identity that Conditional Access policy SANCTIR-CA-MobileBrowser-RequireCompliant requires. Requires Microsoft Authenticator on the device. Created 2 Oct 2026.",
+  "displayName": "REF-iOS-SSO-Extension",
+  "homeScreenDockIcons": [],
+  "homeScreenGridHeight": null,
+  "homeScreenGridWidth": null,
+  "homeScreenPages": [],
+  "iosSingleSignOnExtension": {
+    "@odata.type": "#microsoft.graph.iosAzureAdSingleSignOnExtension",
+    "bundleIdAccessControlList": [],
+    "configurations": [
+      {
+        "@odata.type": "#microsoft.graph.keyStringValuePair",
+        "key": "AppPrefixAllowList",
+        "value": "com.apple."
+      },
+      {
+        "@odata.type": "#microsoft.graph.keyIntegerValuePair",
+        "key": "browser_sso_interaction_enabled",
+        "value": 1
+      },
+      {
+        "@odata.type": "#microsoft.graph.keyIntegerValuePair",
+        "key": "disable_explicit_app_prompt",
+        "value": 1
+      }
+    ],
+    "enableSharedDeviceMode": false
+  },
+  "lockScreenFootnote": null,
+  "notificationSettings": [],
+  "singleSignOnExtension": null,
+  "singleSignOnSettings": null,
+  "wallpaperDisplayLocation": "notConfigured",
+  "wallpaperImage": null
+}

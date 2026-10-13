@@ -1,0 +1,61 @@
+{
+  "conditions": {
+    "applications": {
+      "applicationFilter": null,
+      "excludeApplications": [
+        "0000000a-0000-0000-c000-000000000000"
+      ],
+      "includeApplications": [
+        "All"
+      ],
+      "includeAuthenticationContextClassReferences": [],
+      "includeUserActions": []
+    },
+    "authenticationFlows": null,
+    "clientApplications": null,
+    "clientAppTypes": [
+      "mobileAppsAndDesktopClients"
+    ],
+    "devices": null,
+    "insiderRiskLevels": null,
+    "locations": null,
+    "platforms": {
+      "excludePlatforms": [],
+      "includePlatforms": [
+        "iOS",
+        "android"
+      ]
+    },
+    "servicePrincipalRiskLevels": [],
+    "signInRiskLevels": [],
+    "userRiskLevels": [],
+    "users": {
+      "excludeGroups": [],
+      "excludeGuestsOrExternalUsers": null,
+      "excludeRoles": [],
+      "excludeUsers": [
+        "<excludeUsers-from-config>"
+      ],
+      "includeGroups": [],
+      "includeGuestsOrExternalUsers": null,
+      "includeRoles": [],
+      "includeUsers": [
+        "All"
+      ]
+    }
+  },
+  "deletedDateTime": null,
+  "displayName": "REF-CA-Mobile-AppProtection",
+  "grantControls": {
+    "authenticationStrength": null,
+    "builtInControls": [
+      "compliantDevice",
+      "compliantApplication"
+    ],
+    "customAuthenticationFactors": [],
+    "operator": "AND",
+    "termsOfUse": []
+  },
+  "sessionControls": null,
+  "state": "enabled"
+}

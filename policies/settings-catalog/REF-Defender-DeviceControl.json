@@ -1,0 +1,24 @@
+{
+  "name": "REF-Defender-DeviceControl",
+  "description": "Enables the Defender device control engine (NIST 3.8.7). Engine only - access rules are a separate configuration, so this alone blocks nothing. Deployed on the mdm,microsoftSense channel because plain mdm Defender policies are refused under Tamper Protection with 0x80070005. Created UNASSIGNED 28 Sep 2026.",
+  "platforms": "windows10",
+  "technologies": "mdm,microsoftSense",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_defender_configuration_devicecontrolenabled_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_defender_configuration_devicecontrolenabled",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

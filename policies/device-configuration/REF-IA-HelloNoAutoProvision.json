@@ -1,0 +1,16 @@
+{
+  "@odata.type": "#microsoft.graph.windows10CustomConfiguration",
+  "description": "Windows Hello for Business stays enabled (admin elevation) but Windows no longer starts Hello provisioning after sign-in: daily accounts use the FIDO2 security key only. Security Officer decision 11 Oct 2026; revisit when PIV certificates are in place.",
+  "displayName": "REF-IA-HelloNoAutoProvision",
+  "omaSettings": [
+    {
+      "@odata.type": "#microsoft.graph.omaSettingBoolean",
+      "description": null,
+      "displayName": "DisablePostLogonProvisioning",
+      "isEncrypted": false,
+      "omaUri": "./Device/Vendor/MSFT/PassportForWork/<tenant-id-from-config>/Policies/DisablePostLogonProvisioning",
+      "secretReferenceValueId": null,
+      "value": true
+    }
+  ]
+}

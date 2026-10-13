@@ -1,0 +1,116 @@
+{
+  "name": "REF-Power-LidAndHibernate",
+  "description": "Lid close = shut down; hibernate after 300 s asleep (plugged in and on battery). Decided by the Security Officer 9 Oct 2026: a locked, idle laptop must not sit in sleep with BitLocker keys in memory; hibernation needs the BitLocker PIN to resume. Built by SANCTIR-Set-PowerPolicy.ps1. | 12 Oct 2026: power and sleep buttons = Shut down (Security Officer).",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_selectlidcloseactionpluggedin_3"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_selectlidcloseactionpluggedin",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_selectlidcloseactiononbattery_3"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_selectlidcloseactiononbattery",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_power_hibernatetimeoutpluggedin_enterachibernatetimeout",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+              "settingValueTemplateReference": null,
+              "value": 300
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_hibernatetimeoutpluggedin_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_hibernatetimeoutpluggedin",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_power_hibernatetimeoutonbattery_enterdchibernatetimeout",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+              "settingValueTemplateReference": null,
+              "value": 300
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_hibernatetimeoutonbattery_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_hibernatetimeoutonbattery",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_selectpowerbuttonactiononbattery_3"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_selectpowerbuttonactiononbattery",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_selectpowerbuttonactionpluggedin_3"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_selectpowerbuttonactionpluggedin",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_selectsleepbuttonactiononbattery_3"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_selectsleepbuttonactiononbattery",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_selectsleepbuttonactionpluggedin_3"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_selectsleepbuttonactionpluggedin",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

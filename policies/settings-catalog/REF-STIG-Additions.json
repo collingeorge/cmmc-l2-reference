@@ -1,0 +1,26 @@
+{
+  "name": "REF-STIG-Additions",
+  "description": "DISA Windows 11 STIG V2R8 settings with no other home: added 6 Oct 2026 by SANCTIR-Set-STIGTenantGaps.ps1 (change register PLN-006).",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_userrights_denylocallogon",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingCollectionValue": [
+        {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+          "settingValueTemplateReference": null,
+          "value": "*S-1-5-32-546"
+        }
+      ]
+    }
+  ]
+}

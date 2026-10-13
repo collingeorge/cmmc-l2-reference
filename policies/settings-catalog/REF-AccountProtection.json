@@ -1,0 +1,86 @@
+{
+  "name": "REF-AccountProtection",
+  "description": "",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": "Account Protection",
+    "templateDisplayVersion": "Version 1",
+    "templateFamily": "endpointSecurityAccountProtection",
+    "templateId": "fcef01f2-439d-4c3f-9184-823fd6e97646_1"
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": {
+          "settingValueTemplateId": "93a7ef59-584d-4177-ac5a-2ca31d47e179",
+          "useTemplateDefault": false
+        },
+        "value": "device_vendor_msft_passportforwork_biometrics_facialfeaturesuseenhancedantispoofing_true"
+      },
+      "settingDefinitionId": "device_vendor_msft_passportforwork_biometrics_facialfeaturesuseenhancedantispoofing",
+      "settingInstanceTemplateReference": {
+        "settingInstanceTemplateId": "9a29ce6b-fae8-4785-bbfe-3311f14aa88f"
+      }
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationGroupSettingCollectionInstance",
+      "groupSettingCollectionValue": [
+        {
+          "children": [
+            {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+              "choiceSettingValue": {
+                "children": [],
+                "settingValueTemplateReference": {
+                  "settingValueTemplateId": "92982814-15da-4812-8bbb-32c33f379651",
+                  "useTemplateDefault": false
+                },
+                "value": "device_vendor_msft_passportforwork_{tenantid}_policies_usepassportforwork_true"
+              },
+              "settingDefinitionId": "device_vendor_msft_passportforwork_{tenantid}_policies_usepassportforwork",
+              "settingInstanceTemplateReference": {
+                "settingInstanceTemplateId": "4023eea0-5289-42de-a970-9b5759460de4"
+              }
+            },
+            {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+              "settingDefinitionId": "device_vendor_msft_passportforwork_{tenantid}_policies_pincomplexity_minimumpinlength",
+              "settingInstanceTemplateReference": null,
+              "simpleSettingValue": {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+                "settingValueTemplateReference": {
+                  "settingValueTemplateId": "b2cec844-c747-466e-ae20-92969da2a10c",
+                  "useTemplateDefault": false
+                },
+                "value": 6
+              }
+            },
+            {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+              "choiceSettingValue": {
+                "children": [],
+                "settingValueTemplateReference": {
+                  "settingValueTemplateId": "c36f290a-cac2-4a0b-96b8-596a75e4890d",
+                  "useTemplateDefault": false
+                },
+                "value": "device_vendor_msft_passportforwork_{tenantid}_policies_requiresecuritydevice_true"
+              },
+              "settingDefinitionId": "device_vendor_msft_passportforwork_{tenantid}_policies_requiresecuritydevice",
+              "settingInstanceTemplateReference": {
+                "settingInstanceTemplateId": "04df0c8b-5d87-494e-865e-6bfeef5a24a5"
+              }
+            }
+          ],
+          "settingValueTemplateReference": null
+        }
+      ],
+      "settingDefinitionId": "device_vendor_msft_passportforwork_{tenantid}",
+      "settingInstanceTemplateReference": {
+        "settingInstanceTemplateId": "0ece2bdc-57c1-4be9-93e9-ac9c395a9c94"
+      }
+    }
+  ]
+}

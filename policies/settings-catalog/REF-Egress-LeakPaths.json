@@ -1,0 +1,64 @@
+{
+  "name": "REF-Egress-LeakPaths",
+  "description": "G-11 egress leak paths: Recall, cross-device clipboard, activity upload, Windows Error Reporting, Copilot app. Created UNASSIGNED 27 Sep 2026.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_windowsai_disableaidataanalysis_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_windowsai_disableaidataanalysis",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_allowcrossdeviceclipboard_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_allowcrossdeviceclipboard",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_uploaduseractivities_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_uploaduseractivities",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_errorreporting_disablewindowserrorreporting_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_errorreporting_disablewindowserrorreporting",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_windowsai_removemicrosoftcopilotapp_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_windowsai_removemicrosoftcopilotapp",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

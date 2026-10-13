@@ -1,0 +1,214 @@
+{
+  "authenticationMethodConfigurations": [
+    {
+      "@odata.type": "#microsoft.graph.fido2AuthenticationMethodConfiguration",
+      "defaultPasskeyProfile": "00000000-0000-0000-0000-000000000001",
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "allowedPasskeyProfiles": [
+            "00000000-0000-0000-0000-000000000001"
+          ],
+          "isRegistrationRequired": false,
+          "targetType": "group"
+        }
+      ],
+      "isAttestationEnforced": true,
+      "isSelfServiceRegistrationAllowed": true,
+      "keyRestrictions": {
+        "aaGuids": [],
+        "enforcementType": "block",
+        "isEnforced": false
+      },
+      "passkeyProfiles": [
+        {
+          "attestationEnforcement": "registrationOnly",
+          "keyRestrictions": {
+            "aaGuids": [],
+            "enforcementType": "block",
+            "isEnforced": false
+          },
+          "name": "Default passkey profile",
+          "passkeyTypes": "deviceBound"
+        }
+      ],
+      "state": "enabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.microsoftAuthenticatorAuthenticationMethodConfiguration",
+      "excludeTargets": [],
+      "featureSettings": {
+        "displayAppInformationRequiredState": {
+          "excludeTarget": {
+            "targetType": "group"
+          },
+          "includeTarget": {
+            "targetType": "group"
+          },
+          "state": "default"
+        },
+        "displayLocationInformationRequiredState": {
+          "excludeTarget": {
+            "targetType": "group"
+          },
+          "includeTarget": {
+            "targetType": "group"
+          },
+          "state": "default"
+        }
+      },
+      "includeTargets": [
+        {
+          "authenticationMode": "any",
+          "isRegistrationRequired": false,
+          "targetType": "group"
+        }
+      ],
+      "isSoftwareOathEnabled": true,
+      "state": "disabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.smsAuthenticationMethodConfiguration",
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "isRegistrationRequired": false,
+          "isUsableForSignIn": false,
+          "targetType": "group"
+        }
+      ],
+      "state": "disabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.temporaryAccessPassAuthenticationMethodConfiguration",
+      "defaultLength": 8,
+      "defaultLifetimeInMinutes": 60,
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "isRegistrationRequired": false,
+          "targetType": "group"
+        }
+      ],
+      "isUsableOnce": true,
+      "maximumLifetimeInMinutes": 120,
+      "minimumLifetimeInMinutes": 60,
+      "state": "enabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.softwareOathAuthenticationMethodConfiguration",
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "isRegistrationRequired": false,
+          "targetType": "group"
+        }
+      ],
+      "state": "disabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.voiceAuthenticationMethodConfiguration",
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "isRegistrationRequired": false,
+          "targetType": "group"
+        }
+      ],
+      "isOfficePhoneAllowed": false,
+      "state": "disabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.emailAuthenticationMethodConfiguration",
+      "allowExternalIdToUseEmailOtp": "disabled",
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "isRegistrationRequired": false,
+          "targetType": "group"
+        }
+      ],
+      "state": "disabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.x509CertificateAuthenticationMethodConfiguration",
+      "authenticationModeConfiguration": {
+        "rules": [],
+        "x509CertificateAuthenticationDefaultMode": "x509CertificateSingleFactor",
+        "x509CertificateDefaultRequiredAffinityLevel": "low"
+      },
+      "certificateAuthorityScopes": [],
+      "certificateUserBindings": [
+        {
+          "priority": 1,
+          "trustAffinityLevel": "low",
+          "userProperty": "userPrincipalName",
+          "x509CertificateField": "PrincipalName"
+        },
+        {
+          "priority": 2,
+          "trustAffinityLevel": "low",
+          "userProperty": "userPrincipalName",
+          "x509CertificateField": "RFC822Name"
+        },
+        {
+          "priority": 3,
+          "trustAffinityLevel": "high",
+          "userProperty": "certificateUserIds",
+          "x509CertificateField": "SubjectKeyIdentifier"
+        }
+      ],
+      "crlValidationConfiguration": {
+        "exemptedCertificateAuthoritiesSubjectKeyIdentifiers": [],
+        "state": "disabled"
+      },
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "isRegistrationRequired": false,
+          "targetType": "group"
+        }
+      ],
+      "issuerHintsConfiguration": {
+        "state": "disabled"
+      },
+      "state": "disabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.verifiableCredentialsAuthenticationMethodConfiguration",
+      "excludeTargets": [],
+      "includeTargets": [],
+      "state": "disabled"
+    },
+    {
+      "@odata.type": "#microsoft.graph.qrCodePinAuthenticationMethodConfiguration",
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "isRegistrationRequired": false,
+          "targetType": "group"
+        }
+      ],
+      "pinLength": 8,
+      "standardQRCodeLifetimeInDays": 365,
+      "state": "disabled"
+    }
+  ],
+  "description": "The tenant-wide policy that controls which authentication methods are allowed in the tenant, authentication method registration requirements, and self-service password reset settings",
+  "displayName": "Authentication Methods Policy",
+  "policyMigrationState": null,
+  "policyVersion": "1.5",
+  "registrationEnforcement": {
+    "authenticationMethodsRegistrationCampaign": {
+      "excludeTargets": [],
+      "includeTargets": [
+        {
+          "targetedAuthenticationMethod": "FIDO2",
+          "targetType": "group"
+        }
+      ],
+      "snoozeDurationInDays": 1,
+      "state": "default"
+    }
+  }
+}

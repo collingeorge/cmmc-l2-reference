@@ -1,0 +1,41 @@
+{
+  "name": "REF-CFA-AllowedApps-MDE",
+  "description": "Controlled Folder Access allowed applications, delivered on the mdm,microsoftSense channel. The original SANCTIR-CFA-AllowedApps was a plain mdm policy and was refused with 0x80070005 Access is denied 72 times in 24 hours while Tamper Protection was on, so the allow-list was never in force while Controlled Folder Access itself was enforcing.",
+  "platforms": "windows10",
+  "technologies": "mdm,microsoftSense",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_defender_controlledfolderaccessallowedapplications",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingCollectionValue": [
+        {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+          "settingValueTemplateReference": null,
+          "value": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE"
+        },
+        {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+          "settingValueTemplateReference": null,
+          "value": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE"
+        },
+        {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+          "settingValueTemplateReference": null,
+          "value": "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE"
+        },
+        {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+          "settingValueTemplateReference": null,
+          "value": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE"
+        }
+      ]
+    }
+  ]
+}

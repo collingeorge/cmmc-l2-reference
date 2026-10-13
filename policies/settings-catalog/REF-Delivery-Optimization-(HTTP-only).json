@@ -1,0 +1,24 @@
+{
+  "name": "REF-Delivery-Optimization-(HTTP-only)",
+  "description": "Delivery Optimization Download Mode 0: HTTP only, no LAN or internet peering. Removes the TCP 7680 listener and peer discovery. Adopted 30 Sep 2026 on Copilot recommendation for a two-workstation estate.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_deliveryoptimization_dodownloadmode_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_deliveryoptimization_dodownloadmode",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

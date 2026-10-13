@@ -1,0 +1,35 @@
+{
+  "name": "REF-CM-Edge-OrgSignin",
+  "description": "AC-20 / 3.1.20-21: Edge browser-profile sign-in restricted to tenant verified domains (example.onmicrosoft.com). Work-account sync stays enabled; website sign-ins unaffected.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_restrictsignintopattern_restrictsignintopattern",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+              "settingValueTemplateReference": null,
+              "value": ".*@(sanctir\\.onmicrosoft\\.com|sanctir\\.com)$"
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_restrictsignintopattern_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_restrictsignintopattern",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

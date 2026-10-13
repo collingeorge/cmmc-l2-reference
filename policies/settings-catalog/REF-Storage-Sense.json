@@ -1,0 +1,74 @@
+{
+  "name": "REF-Storage-Sense",
+  "description": "Storage Sense enforced from the tenant: runs weekly, removes temporary files, empties Recycle Bin items older than 30 days. Never deletes from Downloads and never makes OneDrive files online-only. Added 1 Oct 2026: neither endpoint had any automatic cleanup of temporary and installer leftovers.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_storage_allowstoragesenseglobal_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_storage_allowstoragesenseglobal",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_storage_configstoragesenseglobalcadence",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingValue": {
+        "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+        "settingValueTemplateReference": null,
+        "value": 7
+      }
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_storage_allowstoragesensetemporaryfilescleanup_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_storage_allowstoragesensetemporaryfilescleanup",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_storage_configstoragesenserecyclebincleanupthreshold",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingValue": {
+        "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+        "settingValueTemplateReference": null,
+        "value": 30
+      }
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_storage_configstoragesensedownloadscleanupthreshold",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingValue": {
+        "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+        "settingValueTemplateReference": null,
+        "value": 0
+      }
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_storage_configstoragesensecloudcontentdehydrationthreshold",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingValue": {
+        "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+        "settingValueTemplateReference": null,
+        "value": 0
+      }
+    }
+  ]
+}

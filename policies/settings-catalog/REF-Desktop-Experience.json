@@ -1,0 +1,34 @@
+{
+  "name": "REF-Desktop-Experience",
+  "description": "Sanctir desktop standard: Widgets not allowed; taskbar search shown as a search box. Dark mode and left taskbar have no policy and are set by the paired user-context remediation.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_newsandinterests_allownewsandinterests_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_newsandinterests_allownewsandinterests",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_search_configuresearchontaskbarmode_3"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_search_configuresearchontaskbarmode",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

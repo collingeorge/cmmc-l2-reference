@@ -1,0 +1,36 @@
+{
+  "name": "REF-AC8-LogonBanner",
+  "description": "AC-8 Sanctir/DoD consent banner (SRG-APP-000068/069/070)",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_localpoliciessecurityoptions_interactivelogon_messagetitleforusersattemptingtologon",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingValue": {
+        "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+        "settingValueTemplateReference": null,
+        "value": "Sanctir, LLC / DOW Notice and Consent Banner"
+      }
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_localpoliciessecurityoptions_interactivelogon_messagetextforusersattemptingtologon",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingCollectionValue": [
+        {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+          "settingValueTemplateReference": null,
+          "value": "You are accessing a Sanctir, LLC (a Delaware Limited Liability Company) or U.S. Government (USG) Information System (IS) that is provided for Sanctir, LLC- or USG-authorized use only. By using this IS (which includes any device attached to this IS), you consent to the following conditions: -Sanctir, LLC and the USG routinely intercept and monitor communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations. -At any time, Sanctir, LLC and the USG may inspect and seize data stored on this IS. -Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any Sanctir, LLC- or USG-authorized purpose. -This IS includes security measures (e.g., authentication and access controls) to protect Sanctir, LLC and USG interests--not for your personal benefit or privacy. -Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details."
+        }
+      ]
+    }
+  ]
+}

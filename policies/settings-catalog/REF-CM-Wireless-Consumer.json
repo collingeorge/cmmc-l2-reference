@@ -1,0 +1,184 @@
+{
+  "name": "REF-CM-Wireless-Consumer",
+  "description": "Least functionality (3.4.6) and wireless restriction (3.1.16/3.1.17): Bluetooth radio disallowed, phone linking, cellular, Wi-Fi Direct, projection, location, Find My Device off; app access to phone/radios/call history/messaging/device sync denied. Game DVR, hotspot, Wi-Fi Sense already in SANCTIR-SecurityBaseline. Created 2026-09-20.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_bluetooth_allowadvertising_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_bluetooth_allowadvertising",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_bluetooth_allowdiscoverablemode_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_bluetooth_allowdiscoverablemode",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_bluetooth_allowprepairing_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_bluetooth_allowprepairing",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_bluetooth_allowpromptedproximalconnections_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_bluetooth_allowpromptedproximalconnections",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_connectivity_allowbluetooth_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_connectivity_allowbluetooth",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_connectivity_allowcellulardata_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_connectivity_allowcellulardata",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_connectivity_allowphonepclinking_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_connectivity_allowphonepclinking",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_experience_allowfindmydevice_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_experience_allowfindmydevice",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_letappsaccesscallhistory_2"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_letappsaccesscallhistory",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_letappsaccessmessaging_2"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_letappsaccessmessaging",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_letappsaccessphone_2"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_letappsaccessphone",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_letappsaccessradios_2"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_letappsaccessradios",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_letappssyncwithdevices_2"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_letappssyncwithdevices",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_system_allowlocation_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_system_allowlocation",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_wifi_allowwifidirect_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_wifi_allowwifidirect",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_wirelessdisplay_allowmdnsdiscovery_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_wirelessdisplay_allowmdnsdiscovery",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_wirelessdisplay_allowprojectiontopc_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_wirelessdisplay_allowprojectiontopc",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

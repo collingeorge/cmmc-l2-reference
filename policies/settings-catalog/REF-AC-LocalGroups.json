@@ -1,0 +1,103 @@
+{
+  "name": "REF-AC-LocalGroups",
+  "description": "CMMC 3.1.5 / 3.1.6: Administrators restricted (Replace) to built-in Administrator, LAPS account la-admin, and the Entra Global Administrator / Entra Joined Device Local Administrator role SIDs.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationGroupSettingCollectionInstance",
+      "groupSettingCollectionValue": [
+        {
+          "children": [
+            {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationGroupSettingCollectionInstance",
+              "groupSettingCollectionValue": [
+                {
+                  "children": [
+                    {
+                      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingCollectionInstance",
+                      "choiceSettingCollectionValue": [
+                        {
+                          "children": [],
+                          "settingValueTemplateReference": null,
+                          "value": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_desc_administrators"
+                        }
+                      ],
+                      "settingDefinitionId": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_desc",
+                      "settingInstanceTemplateReference": null
+                    },
+                    {
+                      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+                      "choiceSettingValue": {
+                        "children": [],
+                        "settingValueTemplateReference": null,
+                        "value": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_action_add_restrict"
+                      },
+                      "settingDefinitionId": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_action",
+                      "settingInstanceTemplateReference": null
+                    },
+                    {
+                      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+                      "choiceSettingValue": {
+                        "children": [
+                          {
+                            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionInstance",
+                            "settingDefinitionId": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_users",
+                            "settingInstanceTemplateReference": null,
+                            "simpleSettingCollectionValue": [
+                              {
+                                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                                "settingValueTemplateReference": null,
+                                "value": "snc-builtin-disabled"
+                              },
+                              {
+                                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                                "settingValueTemplateReference": null,
+                                "value": "la-admin"
+                              },
+                              {
+                                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                                "settingValueTemplateReference": null,
+                                "value": "S-1-12-1-3298148996-1153151359-519037115-2679404937"
+                              },
+                              {
+                                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                                "settingValueTemplateReference": null,
+                                "value": "S-1-12-1-638234756-1248851365-747764397-145304014"
+                              },
+                              {
+                                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                                "settingValueTemplateReference": null,
+                                "value": "S-1-12-1-850862068-1110620213-3896712368-3071779087"
+                              }
+                            ]
+                          }
+                        ],
+                        "settingValueTemplateReference": null,
+                        "value": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_userselectiontype_manual"
+                      },
+                      "settingDefinitionId": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_userselectiontype",
+                      "settingInstanceTemplateReference": null
+                    }
+                  ],
+                  "settingValueTemplateReference": null
+                }
+              ],
+              "settingDefinitionId": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup",
+              "settingInstanceTemplateReference": null
+            }
+          ],
+          "settingValueTemplateReference": null
+        }
+      ],
+      "settingDefinitionId": "device_vendor_msft_policy_config_localusersandgroups_configure",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}
