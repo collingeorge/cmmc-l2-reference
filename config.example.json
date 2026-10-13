@@ -1,0 +1,34 @@
+{
+  "_comment": "Copy to config.json and fill in. config.json is git-ignored and must never be committed. Every script reads these values; none are embedded in code.",
+  "tenant": {
+    "id": "00000000-0000-0000-0000-000000000000",
+    "primaryDomain": "example.com",
+    "onmicrosoftDomain": "example.onmicrosoft.com"
+  },
+  "accounts": {
+    "dailyUser": "user@example.com",
+    "admin": "admin@example.onmicrosoft.com",
+    "breakGlass": "ea01@example.onmicrosoft.com",
+    "localAdmin": "la-admin"
+  },
+  "devices": {
+    "workstations": ["WS01", "WS02"],
+    "deviceGroupId": "00000000-0000-0000-0000-000000000000"
+  },
+  "azure": {
+    "subscriptionId": "00000000-0000-0000-0000-000000000000",
+    "resourceGroup": "rg-security",
+    "workspaceName": "law-sentinel",
+    "location": "eastus",
+    "actionGroupName": "ag-security-officer",
+    "archiveStorageAccount": "auditimmutable"
+  },
+  "graph": {
+    "clientApp": "14d82eec-204b-4c2f-b7e8-296a70dab67e",
+    "_clientAppNote": "Microsoft Graph Command Line Tools (first-party public client). Restrict it to the admin accounts with 'assignment required'; it cannot bind tokens, so exclude the admin account from any token-protection policy or use another client."
+  },
+  "contact": {
+    "securityOfficer": "security@example.com",
+    "timeZone": "America/Los_Angeles"
+  }
+}
