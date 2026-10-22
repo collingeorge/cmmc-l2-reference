@@ -98,7 +98,7 @@ $PerUser = @(
     # V-253477 WN11-UC-000015  No toast notifications on the lock screen - every user profile
     @{ V = 'V-253477'; K = 'Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications'; N = 'NoToastApplicationNotificationOnLockScreen'; D = 1 }
     # V-253478 WN11-UC-000020  Preserve zone information in attachments - every user profile (10 Oct 2026: the user-targeted
-    # Intune policy reaches cgeorge only; admin and REF-la profiles were missing it in the 10 Oct scan)
+    # Intune policy reaches user only; admin and REF-la profiles were missing it in the 10 Oct scan)
     @{ V = 'V-253478'; K = 'Software\Microsoft\Windows\CurrentVersion\Policies\Attachments'; N = 'SaveZoneInformation'; D = 2 }
 )
 # V-253435 / V-253436  Built-in accounts renamed. Both stay DISABLED (tenant policy). LAPS manages REF-la, not these.

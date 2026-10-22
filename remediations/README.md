@@ -18,6 +18,11 @@ Intune **remediations** (detection script + remediation script, run as SYSTEM on
 | `UserExperience/` | pair | The user-facing settings a standard user is allowed to see, held consistent |
 | `CodexRemoved/` | pair | Example of removing an unmanaged desktop app and disabling the local accounts it created; adapt the package name |
 | `DiskHygiene/`, `EndpointHealth/`, `UpdateHealth/`, `DailyAudit/` | detect-only | Report into the event log; nothing to remediate |
+| `STIGRegistry/` | builder | The DISA registry values no settings-catalog policy can set (OneDrive pop-up management, .NET strong crypto, Office values from the CSV), held hourly — one owner per value, never a second writer |
+| `OneDriveHealth/` | builder | Hourly heartbeat upload test per signed-in user; a OneDrive that has stopped syncing (or is not running) is restarted **in that user's session** without admin rights; events 4301–4303. Waits 30 minutes after boot or wake |
+| `DNSGuard/` | builder | Blocks the Windows DNS client from reaching anything but the VPN's local resolver, so a VPN reconnect cannot leak DNS to the router; releases after 3 minutes of real outage so a machine is never taken offline. Edit the pilot host list |
+| `KillerSuite/` | pair | Removes a vendor network-utility suite (Killer/Rivet) and keeps the adapter on Microsoft's in-box driver. Pair it with a **declined** (or, if already approved, **suspended**) driver in an Intune driver-update profile, or Windows Update re-installs it |
+| `RegistryWriterAudit/` | builder, temporary | Adds one audit entry to a registry key and reports every Security 4657 for it (process, account, old → new value) — how to find "what keeps resetting this setting". At Sanctir it showed that Windows' own MDM client rewrote a Defender value at every Intune sync because the same setting was deployed in two forms (CSP and ADMX). Rebuild with `-Mode Remove` to take it off |
 
 ## Deploy
 
