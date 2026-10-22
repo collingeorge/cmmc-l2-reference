@@ -1,0 +1,24 @@
+{
+  "name": "REF-Gaming-Off",
+  "description": "Security Officer 16 Oct 2026: gaming off and never able to be turned on. Hides the Gaming pages of Settings (Game Bar, Captures, Broadcasting, Game Mode, TruePlay, Xbox Networking, gaming quiet moments). Page Visibility List is one value for all Settings pages - add any future page here. Paired with AllowGameDVR = 0, Xbox services disabled (SystemServices), SANCTIR-Consumer-Apps v7 and Desktop Experience (user). PLN-006 16 Oct 2026. | 17 Oct 2026: privacy-general (Recommendations & offers) and privacy-speechtyping (Inking & typing personalization) hidden as well (Security Officer).",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+      "settingDefinitionId": "device_vendor_msft_policy_config_settings_pagevisibilitylist",
+      "settingInstanceTemplateReference": null,
+      "simpleSettingValue": {
+        "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+        "settingValueTemplateReference": null,
+        "value": "hide:gaming-gamebar;gaming-gamedvr;gaming-broadcasting;gaming-gamemode;gaming-trueplay;gaming-xboxnetworking;quietmomentsgame;privacy-general;privacy-speechtyping"
+      }
+    }
+  ]
+}

@@ -9,7 +9,7 @@
   "osMaximumBuildVersion": null,
   "osMaximumVersion": null,
   "osMinimumBuildVersion": null,
-  "osMinimumVersion": "18.0",
+  "osMinimumVersion": "26.0",
   "passcodeBlockSimple": true,
   "passcodeExpirationDays": null,
   "passcodeMinimumCharacterSetCount": null,

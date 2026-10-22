@@ -47,7 +47,7 @@
       ],
       "combinationConfigurations": [],
       "description": "Phishing-resistant, Passwordless methods for the strongest authentication, such as a FIDO2 security key",
-      "displayName": "Phishing-resistant MFA",
+      "displayName": "Phishing-resistant-MFA",
       "policyType": "builtIn",
       "requirementsSatisfied": "mfa"
     },

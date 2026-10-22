@@ -1,0 +1,82 @@
+{
+  "name": "REF-DeviceInstall-Block",
+  "description": "Security Officer 17 Oct 2026: \"disable Intel Management Engine on all systems and never allow it to be turned on\" and \"finish the killer driver removal\". Killer Networking Software component (SWC\\VID_1A56&PID_1000&SID_0002) blocked; the Killer adapter is never blocked; suite removed by SANCTIR-KillerSuite. Windows never installs the ME interface (WS01 A0E0, WS02 A2BA) or its WMI/DAL/iCLS components; already-installed ones are removed. The ME firmware itself cannot be disabled from the OS; Intel AMT is off in BIOS behind the BIOS administrator password (WS01, vPro). Services: SANCTIR-Consumer-Apps v10. WS02 TPM is Intel PTT via ACPI MSFT0101 - not blocked. PLN-006 17 Oct 2026.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_deviceinstallation_preventinstallationofmatchingdeviceids_deviceinstall_ids_deny_list",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingCollectionValue": [
+              {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                "settingValueTemplateReference": null,
+                "value": "PCI\\VEN_8086&DEV_A0E0"
+              },
+              {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                "settingValueTemplateReference": null,
+                "value": "PCI\\VEN_8086&DEV_A0E0&SUBSYS_0A201028"
+              },
+              {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                "settingValueTemplateReference": null,
+                "value": "PCI\\VEN_8086&DEV_A2BA"
+              },
+              {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                "settingValueTemplateReference": null,
+                "value": "PCI\\VEN_8086&DEV_A2BA&SUBSYS_08591028"
+              },
+              {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                "settingValueTemplateReference": null,
+                "value": "SWC\\06657A6D-FE0F-4C90-8DDA-A1501C74CE4B"
+              },
+              {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                "settingValueTemplateReference": null,
+                "value": "SWC\\3C4852D6-D47B-4F46-B05E-B5EDC1AA440E"
+              },
+              {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                "settingValueTemplateReference": null,
+                "value": "SWC\\PROVIDER_INTEL_COMPONENT_ICLSCLIENT"
+              },
+              {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+                "settingValueTemplateReference": null,
+                "value": "SWC\\VID_1A56&PID_1000&SID_0002"
+              }
+            ]
+          },
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+            "choiceSettingValue": {
+              "children": [],
+              "settingValueTemplateReference": null,
+              "value": "device_vendor_msft_policy_config_deviceinstallation_preventinstallationofmatchingdeviceids_deviceinstall_ids_deny_retroactive_1"
+            },
+            "settingDefinitionId": "device_vendor_msft_policy_config_deviceinstallation_preventinstallationofmatchingdeviceids_deviceinstall_ids_deny_retroactive",
+            "settingInstanceTemplateReference": null
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_deviceinstallation_preventinstallationofmatchingdeviceids_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_deviceinstallation_preventinstallationofmatchingdeviceids",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

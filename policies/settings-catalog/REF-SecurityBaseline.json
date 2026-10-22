@@ -1,6 +1,6 @@
 {
   "name": "REF-SecurityBaseline",
-  "description": "",
+  "description": " | 20 Oct 2026: User Account Control Behavior Of The Elevation Prompt For Administrators -> Prompt for credentials on the secure desktop (every elevation needs the CAC - Security Officer 20 Oct 2026) | 21 Oct 2026: Defender DisableLocalAdminMerge CSP copy removed - one owner = SANCTIR-DefenderAV-STIG (DISA ADMX) (SANCTIR-Set-DefenderMergeOwner.ps1) | 21 Oct 2026: Defender DisableLocalAdminMerge CSP copy RESTORED (keeps Defender at 1 through restarts) (SANCTIR-Set-DefenderMergeOwner.ps1 -Restore)",
   "platforms": "windows10",
   "technologies": "mdm",
   "templateReference": {
@@ -4820,21 +4820,6 @@
       "choiceSettingValue": {
         "children": [],
         "settingValueTemplateReference": {
-          "settingValueTemplateId": "30b8105a-d863-45d0-8c86-f64779f5351b",
-          "useTemplateDefault": false
-        },
-        "value": "device_vendor_msft_defender_configuration_disablelocaladminmerge_1"
-      },
-      "settingDefinitionId": "device_vendor_msft_defender_configuration_disablelocaladminmerge",
-      "settingInstanceTemplateReference": {
-        "settingInstanceTemplateId": "8f0bf77e-6fd1-4731-9ae7-0d7a1e717bf4"
-      }
-    },
-    {
-      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
-      "choiceSettingValue": {
-        "children": [],
-        "settingValueTemplateReference": {
           "settingValueTemplateId": "09498605-b333-486d-92d0-e06e3fabb894",
           "useTemplateDefault": false
         },
@@ -5620,7 +5605,7 @@
           "settingValueTemplateId": "91079efc-e12a-4c33-a89e-4259a27da467",
           "useTemplateDefault": false
         },
-        "value": "device_vendor_msft_policy_config_localpoliciessecurityoptions_useraccountcontrol_behavioroftheelevationpromptforadministrators_2"
+        "value": "device_vendor_msft_policy_config_localpoliciessecurityoptions_useraccountcontrol_behavioroftheelevationpromptforadministrators_1"
       },
       "settingDefinitionId": "device_vendor_msft_policy_config_localpoliciessecurityoptions_useraccountcontrol_behavioroftheelevationpromptforadministrators",
       "settingInstanceTemplateReference": {
@@ -5635,7 +5620,7 @@
           "settingValueTemplateId": "4f5a409e-a20c-4014-a917-12f49e9e7cd5",
           "useTemplateDefault": false
         },
-        "value": "device_vendor_msft_policy_config_localpoliciessecurityoptions_useraccountcontrol_behavioroftheelevationpromptforstandardusers_1"
+        "value": "device_vendor_msft_policy_config_localpoliciessecurityoptions_useraccountcontrol_behavioroftheelevationpromptforstandardusers_0"
       },
       "settingDefinitionId": "device_vendor_msft_policy_config_localpoliciessecurityoptions_useraccountcontrol_behavioroftheelevationpromptforstandardusers",
       "settingInstanceTemplateReference": {
@@ -6323,6 +6308,21 @@
       "settingDefinitionId": "device_vendor_msft_policy_config_windowsinkworkspace_allowwindowsinkworkspace",
       "settingInstanceTemplateReference": {
         "settingInstanceTemplateId": "9f5f7524-f1b1-4c57-a5dd-382a9713d54d"
+      }
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": {
+          "settingValueTemplateId": "30b8105a-d863-45d0-8c86-f64779f5351b",
+          "useTemplateDefault": false
+        },
+        "value": "device_vendor_msft_defender_configuration_disablelocaladminmerge_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_defender_configuration_disablelocaladminmerge",
+      "settingInstanceTemplateReference": {
+        "settingInstanceTemplateId": "8f0bf77e-6fd1-4731-9ae7-0d7a1e717bf4"
       }
     }
   ]

@@ -1,6 +1,6 @@
 {
   "name": "REF-Power-LidAndHibernate",
-  "description": "Lid close = shut down; hibernate after 300 s asleep (plugged in and on battery). Decided by the Security Officer 9 Oct 2026: a locked, idle laptop must not sit in sleep with BitLocker keys in memory; hibernation needs the BitLocker PIN to resume. Built by SANCTIR-Set-PowerPolicy.ps1. | 12 Oct 2026: power and sleep buttons = Shut down (Security Officer).",
+  "description": "Lid close = shut down; hibernate after 300 s asleep (plugged in and on battery). Decided by the Security Officer 9 Oct 2026: a locked, idle laptop must not sit in sleep with BitLocker keys in memory; hibernation needs the BitLocker PIN to resume. Built by SANCTIR-Set-PowerPolicy.ps1. | 12 Oct 2026: power and sleep buttons = Shut down (Security Officer). | 17 Oct 2026: system sleep timeout 900 s plugged in and on battery - with standby states disallowed the workstation hibernates after 15 min idle (Security Officer: 'Hibernate').",
   "platforms": "windows10",
   "technologies": "mdm",
   "templateReference": {
@@ -110,6 +110,48 @@
         "value": "device_vendor_msft_policy_config_power_selectsleepbuttonactionpluggedin_3"
       },
       "settingDefinitionId": "device_vendor_msft_policy_config_power_selectsleepbuttonactionpluggedin",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_power_standbytimeoutpluggedin_enteracstandbytimeout",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+              "settingValueTemplateReference": null,
+              "value": 900
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_standbytimeoutpluggedin_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_standbytimeoutpluggedin",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_power_standbytimeoutonbattery_enterdcstandbytimeout",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+              "settingValueTemplateReference": null,
+              "value": 900
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_power_standbytimeoutonbattery_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_power_standbytimeoutonbattery",
       "settingInstanceTemplateReference": null
     }
   ]

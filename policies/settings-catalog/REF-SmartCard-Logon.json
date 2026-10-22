@@ -1,0 +1,24 @@
+{
+  "name": "REF-SmartCard-Logon",
+  "description": "Smart Card > Allow user name hint = Enabled, so admin can sign in to Windows with the WidePoint ECA CAC (the certificate's UPN is ORC3020036596@DODECA; Entra binds the card to admin by key ID). SANCTIR-Set-SmartCardHint.ps1, PLN-006 20 Oct 2026.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_smartcard_x509hintsneeded_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_smartcard_x509hintsneeded",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

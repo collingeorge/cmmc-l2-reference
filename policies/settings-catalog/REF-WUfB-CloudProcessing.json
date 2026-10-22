@@ -1,0 +1,24 @@
+{
+  "name": "REF-WUfB-CloudProcessing",
+  "description": "Prerequisite for Intune driver-update management (SANCTIR-Drivers): Windows Update for Business cloud processing on. Security Officer 18 Oct 2026. PLN-006.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_system_allowwufbcloudprocessing_8"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_system_allowwufbcloudprocessing",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

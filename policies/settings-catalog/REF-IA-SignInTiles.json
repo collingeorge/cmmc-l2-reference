@@ -1,0 +1,35 @@
+{
+  "name": "REF-IA-SignInTiles",
+  "description": "Windows sign-in shows ONLY security key (YubiKey passkey) and smart card (CAC): password, Hello PIN, fingerprint, face, picture password, Microsoft account, companion unlock hidden; web sign-in off. Security Officer 20 Oct 2026 (\"only passkey and CAC\"; password tile \"Hide it everywhere\" - no offline password path, recovery = BitLocker recovery + reimage). SANCTIR-Set-SignInTiles.ps1, PLN-006.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_admx_credentialproviders_excludedcredentialproviders_excludedcredentialproviders_message",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+              "settingValueTemplateReference": null,
+              "value": "{60b78e88-ead8-445c-9cfd-0b87f74ea6cd},{D6886603-9D2F-4EB2-B667-1971041FA96B},{cb82ea12-9f71-446d-89e1-8d0924e1256e},{BEC09223-B018-416D-A0AC-523971B639F5},{8AF662BF-65A0-4D0A-A540-A338A999D36F},{2135f72a-90b5-4ed3-a7f1-8bb705ac276a},{F8A0B131-5F68-486c-8040-7E8FC3C85BB6},{27FBDB57-B613-4AF2-9D7E-4FA7A66C21AD}"
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_credentialproviders_excludedcredentialproviders_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_credentialproviders_excludedcredentialproviders",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

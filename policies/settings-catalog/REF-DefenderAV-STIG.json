@@ -1,0 +1,239 @@
+{
+  "name": "REF-DefenderAV-STIG",
+  "description": "DISA Microsoft Defender Antivirus STIG V2R10. DISA's own Intune settings-catalog export (DoD Microsoft Defender Antivirus STIG v2r10 Computer Settings Catalog.json, SHA-256 649131F0D06AB2F3), every setting not already held by another SANCTIR policy, at DISA's value. Security Officer, 20 Oct 2026: 'let's get all of these closed'. Settings held elsewhere with a different value were not changed (see Evidence disa-package-defenderav). PLN-006 20 Oct 2026. | 20 Oct 2026 STIG closure: D1 (SANCTIR-Set-STIGClosure.ps1) | 20 Oct 2026 STIG closure: D2 (SANCTIR-Set-STIGClosure.ps1) | 22 Oct 2026: ADMX DisableLocalAdminMerge removed - the MDM client rewrote it to 0 at every sync (POAM-046 audit); Defender CSP copy + STIG Registry Closure own it (SANCTIR-Set-DefenderMergeOwner.ps1 -RemoveAdmx)",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_disableautoexclusions_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_disableautoexclusions",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_disableblockatfirstseen_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_disableblockatfirstseen",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+            "choiceSettingValue": {
+              "children": [],
+              "settingValueTemplateReference": null,
+              "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_spynetreporting_spynetreporting_2"
+            },
+            "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_spynetreporting_spynetreporting",
+            "settingInstanceTemplateReference": null
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_spynetreporting_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_spynetreporting",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_mpengine_enablefilehashcomputation_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_mpengine_enablefilehashcomputation",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_randomizescheduletasktimes_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_randomizescheduletasktimes",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_disablepackedexescanning_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_disablepackedexescanning",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_disableremovabledrivescanning_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_disableremovabledrivescanning",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+            "choiceSettingValue": {
+              "children": [],
+              "settingValueTemplateReference": null,
+              "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_scheduleday_scan_scheduleday_0"
+            },
+            "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_scheduleday_scan_scheduleday",
+            "settingInstanceTemplateReference": null
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_scheduleday_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_scheduleday",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_disableemailscanning_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_disableemailscanning",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_disableheuristics_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_scan_disableheuristics",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_assignaturedue_signatureupdate_assignaturedue",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+              "settingValueTemplateReference": null,
+              "value": 7
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_assignaturedue_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_assignaturedue",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
+            "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_avsignaturedue_signatureupdate_avsignaturedue",
+            "settingInstanceTemplateReference": null,
+            "simpleSettingValue": {
+              "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+              "settingValueTemplateReference": null,
+              "value": 7
+            }
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_avsignaturedue_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_avsignaturedue",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [
+          {
+            "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+            "choiceSettingValue": {
+              "children": [],
+              "settingValueTemplateReference": null,
+              "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_scheduleday_signatureupdate_scheduleday_0"
+            },
+            "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_scheduleday_signatureupdate_scheduleday",
+            "settingInstanceTemplateReference": null
+          }
+        ],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_scheduleday_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_microsoftdefenderantivirus_signatureupdate_scheduleday",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_defender_configuration_allowswitchtoasyncinspection_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_defender_configuration_allowswitchtoasyncinspection",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_defender_configuration_reporting_enabledynamicsignaturedroppedeventreporting_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_defender_configuration_reporting_enabledynamicsignaturedroppedeventreporting",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_defender_configuration_hideexclusionsfromlocalusers_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_defender_configuration_hideexclusionsfromlocalusers",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_windowsdefendersecuritycenter_disablefamilyui_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_windowsdefendersecuritycenter_disablefamilyui",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

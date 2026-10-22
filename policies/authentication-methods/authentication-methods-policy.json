@@ -3,7 +3,11 @@
     {
       "@odata.type": "#microsoft.graph.fido2AuthenticationMethodConfiguration",
       "defaultPasskeyProfile": "00000000-0000-0000-0000-000000000001",
-      "excludeTargets": [],
+      "excludeTargets": [
+        {
+          "targetType": "group"
+        }
+      ],
       "includeTargets": [
         {
           "allowedPasskeyProfiles": [
@@ -14,19 +18,25 @@
         }
       ],
       "isAttestationEnforced": true,
-      "isSelfServiceRegistrationAllowed": true,
+      "isSelfServiceRegistrationAllowed": false,
       "keyRestrictions": {
-        "aaGuids": [],
-        "enforcementType": "block",
-        "isEnforced": false
+        "aaGuids": [
+          "73bb0cd4-e502-49b8-9c6f-b59445bf720b",
+          "85203421-48f9-4355-9bc8-8a53846e5083"
+        ],
+        "enforcementType": "allow",
+        "isEnforced": true
       },
       "passkeyProfiles": [
         {
           "attestationEnforcement": "registrationOnly",
           "keyRestrictions": {
-            "aaGuids": [],
-            "enforcementType": "block",
-            "isEnforced": false
+            "aaGuids": [
+              "73bb0cd4-e502-49b8-9c6f-b59445bf720b",
+              "85203421-48f9-4355-9bc8-8a53846e5083"
+            ],
+            "enforcementType": "allow",
+            "isEnforced": true
           },
           "name": "Default passkey profile",
           "passkeyTypes": "deviceBound"
@@ -36,7 +46,11 @@
     },
     {
       "@odata.type": "#microsoft.graph.microsoftAuthenticatorAuthenticationMethodConfiguration",
-      "excludeTargets": [],
+      "excludeTargets": [
+        {
+          "targetType": "group"
+        }
+      ],
       "featureSettings": {
         "displayAppInformationRequiredState": {
           "excludeTarget": {
@@ -69,7 +83,11 @@
     },
     {
       "@odata.type": "#microsoft.graph.smsAuthenticationMethodConfiguration",
-      "excludeTargets": [],
+      "excludeTargets": [
+        {
+          "targetType": "group"
+        }
+      ],
       "includeTargets": [
         {
           "isRegistrationRequired": false,
@@ -83,7 +101,11 @@
       "@odata.type": "#microsoft.graph.temporaryAccessPassAuthenticationMethodConfiguration",
       "defaultLength": 8,
       "defaultLifetimeInMinutes": 60,
-      "excludeTargets": [],
+      "excludeTargets": [
+        {
+          "targetType": "group"
+        }
+      ],
       "includeTargets": [
         {
           "isRegistrationRequired": false,
@@ -93,11 +115,15 @@
       "isUsableOnce": true,
       "maximumLifetimeInMinutes": 120,
       "minimumLifetimeInMinutes": 60,
-      "state": "enabled"
+      "state": "disabled"
     },
     {
       "@odata.type": "#microsoft.graph.softwareOathAuthenticationMethodConfiguration",
-      "excludeTargets": [],
+      "excludeTargets": [
+        {
+          "targetType": "group"
+        }
+      ],
       "includeTargets": [
         {
           "isRegistrationRequired": false,
@@ -108,7 +134,11 @@
     },
     {
       "@odata.type": "#microsoft.graph.voiceAuthenticationMethodConfiguration",
-      "excludeTargets": [],
+      "excludeTargets": [
+        {
+          "targetType": "group"
+        }
+      ],
       "includeTargets": [
         {
           "isRegistrationRequired": false,
@@ -121,7 +151,11 @@
     {
       "@odata.type": "#microsoft.graph.emailAuthenticationMethodConfiguration",
       "allowExternalIdToUseEmailOtp": "disabled",
-      "excludeTargets": [],
+      "excludeTargets": [
+        {
+          "targetType": "group"
+        }
+      ],
       "includeTargets": [
         {
           "isRegistrationRequired": false,
@@ -133,26 +167,23 @@
     {
       "@odata.type": "#microsoft.graph.x509CertificateAuthenticationMethodConfiguration",
       "authenticationModeConfiguration": {
-        "rules": [],
+        "rules": [
+          {
+            "identifier": "2.16.840.1.101.3.2.1.12.10",
+            "issuerSubjectIdentifier": null,
+            "policyOidIdentifier": "2.16.840.1.101.3.2.1.12.10",
+            "x509CertificateAuthenticationMode": "x509CertificateMultiFactor",
+            "x509CertificateRequiredAffinityLevel": "high",
+            "x509CertificateRuleType": "policyOID"
+          }
+        ],
         "x509CertificateAuthenticationDefaultMode": "x509CertificateSingleFactor",
-        "x509CertificateDefaultRequiredAffinityLevel": "low"
+        "x509CertificateDefaultRequiredAffinityLevel": "high"
       },
       "certificateAuthorityScopes": [],
       "certificateUserBindings": [
         {
           "priority": 1,
-          "trustAffinityLevel": "low",
-          "userProperty": "userPrincipalName",
-          "x509CertificateField": "PrincipalName"
-        },
-        {
-          "priority": 2,
-          "trustAffinityLevel": "low",
-          "userProperty": "userPrincipalName",
-          "x509CertificateField": "RFC822Name"
-        },
-        {
-          "priority": 3,
           "trustAffinityLevel": "high",
           "userProperty": "certificateUserIds",
           "x509CertificateField": "SubjectKeyIdentifier"
@@ -160,7 +191,7 @@
       ],
       "crlValidationConfiguration": {
         "exemptedCertificateAuthoritiesSubjectKeyIdentifiers": [],
-        "state": "disabled"
+        "state": "enabled"
       },
       "excludeTargets": [],
       "includeTargets": [
@@ -172,7 +203,7 @@
       "issuerHintsConfiguration": {
         "state": "disabled"
       },
-      "state": "disabled"
+      "state": "enabled"
     },
     {
       "@odata.type": "#microsoft.graph.verifiableCredentialsAuthenticationMethodConfiguration",
@@ -201,14 +232,9 @@
   "registrationEnforcement": {
     "authenticationMethodsRegistrationCampaign": {
       "excludeTargets": [],
-      "includeTargets": [
-        {
-          "targetedAuthenticationMethod": "FIDO2",
-          "targetType": "group"
-        }
-      ],
-      "snoozeDurationInDays": 1,
-      "state": "default"
+      "includeTargets": [],
+      "snoozeDurationInDays": 0,
+      "state": "disabled"
     }
   }
 }

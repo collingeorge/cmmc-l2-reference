@@ -1,0 +1,24 @@
+{
+  "name": "REF-IA-HelloOff",
+  "description": "Windows Hello for Business and Hello biometrics OFF on every PC. Security Officer 20 Oct 2026: \"no pass keys, no windows hello, nothing, nowhere\". SANCTIR-Set-HelloOff.ps1, PLN-006.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_passportforwork_biometrics_usebiometrics_false"
+      },
+      "settingDefinitionId": "device_vendor_msft_passportforwork_biometrics_usebiometrics",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

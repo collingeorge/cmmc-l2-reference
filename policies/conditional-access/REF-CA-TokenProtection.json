@@ -33,6 +33,7 @@
       "excludeGuestsOrExternalUsers": null,
       "excludeRoles": [],
       "excludeUsers": [
+        "<excludeUsers-from-config>",
         "<excludeUsers-from-config>"
       ],
       "includeGroups": [],

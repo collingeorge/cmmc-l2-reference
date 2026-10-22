@@ -1,6 +1,6 @@
 {
   "name": "REF-DefenderAV",
-  "description": "",
+  "description": " | 20 Oct 2026: Submit Samples Consent -> Send safe samples automatically. (DISA Defender AV V2R10 V-213435)",
   "platforms": "windows10",
   "technologies": "mdm,microsoftSense",
   "templateReference": {
@@ -438,7 +438,7 @@
           "settingValueTemplateId": "826ed4b6-e04f-4975-9d23-6f0904b0d87e",
           "useTemplateDefault": false
         },
-        "value": "device_vendor_msft_policy_config_defender_submitsamplesconsent_2"
+        "value": "device_vendor_msft_policy_config_defender_submitsamplesconsent_1"
       },
       "settingDefinitionId": "device_vendor_msft_policy_config_defender_submitsamplesconsent",
       "settingInstanceTemplateReference": {

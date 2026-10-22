@@ -16,7 +16,12 @@
     "clientAppTypes": [
       "all"
     ],
-    "devices": null,
+    "devices": {
+      "deviceFilter": {
+        "mode": "exclude",
+        "rule": "device.isCompliant -eq True -and device.trustType -eq \"AzureAD\""
+      }
+    },
     "insiderRiskLevels": null,
     "locations": null,
     "platforms": null,

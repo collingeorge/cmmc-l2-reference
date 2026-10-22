@@ -1,0 +1,74 @@
+{
+  "name": "REF-Privacy-Off",
+  "description": "Security Officer 17 Oct 2026: Recommendations & offers and Inking & typing personalization always off and unable to be turned on. Pages hidden by SANCTIR-Gaming-Off (Page Visibility List); per-user switches re-asserted by SANCTIR - Desktop Experience (user) v4. PLN-006 17 Oct 2026.",
+  "platforms": "windows10",
+  "technologies": "mdm",
+  "templateReference": {
+    "templateDisplayName": null,
+    "templateDisplayVersion": null,
+    "templateFamily": "none",
+    "templateId": ""
+  },
+  "settings": [
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_disableadvertisingid_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_disableadvertisingid",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_settings_allowonlinetips_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_settings_allowonlinetips",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_privacy_allowinputpersonalization_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_privacy_allowinputpersonalization",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_textinput_allowlinguisticdatacollection_0"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_textinput_allowlinguisticdatacollection",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "device_vendor_msft_policy_config_admx_globalization_implicitdatacollectionoff_2_1"
+      },
+      "settingDefinitionId": "device_vendor_msft_policy_config_admx_globalization_implicitdatacollectionoff_2",
+      "settingInstanceTemplateReference": null
+    },
+    {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+      "choiceSettingValue": {
+        "children": [],
+        "settingValueTemplateReference": null,
+        "value": "user_vendor_msft_policy_config_admx_globalization_implicitdatacollectionoff_1_1"
+      },
+      "settingDefinitionId": "user_vendor_msft_policy_config_admx_globalization_implicitdatacollectionoff_1",
+      "settingInstanceTemplateReference": null
+    }
+  ]
+}

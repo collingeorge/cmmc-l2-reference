@@ -1,0 +1,57 @@
+{
+  "conditions": {
+    "applications": {
+      "applicationFilter": null,
+      "excludeApplications": [],
+      "includeApplications": [
+        "All"
+      ],
+      "includeAuthenticationContextClassReferences": [],
+      "includeUserActions": []
+    },
+    "authenticationFlows": null,
+    "clientApplications": null,
+    "clientAppTypes": [
+      "all"
+    ],
+    "devices": null,
+    "insiderRiskLevels": null,
+    "locations": null,
+    "platforms": null,
+    "servicePrincipalRiskLevels": [],
+    "signInRiskLevels": [],
+    "userRiskLevels": [],
+    "users": {
+      "excludeGroups": [],
+      "excludeGuestsOrExternalUsers": null,
+      "excludeRoles": [],
+      "excludeUsers": [],
+      "includeGroups": [],
+      "includeGuestsOrExternalUsers": null,
+      "includeRoles": [],
+      "includeUsers": [
+        "<admin-from-config>"
+      ]
+    }
+  },
+  "deletedDateTime": null,
+  "displayName": "REF-CA-Admin-CAC-Only",
+  "grantControls": {
+    "authenticationStrength": {
+      "allowedCombinations": [
+        "x509CertificateMultiFactor"
+      ],
+      "combinationConfigurations": [],
+      "description": "WidePoint ECA CAC (certificate-based authentication, multi-factor) only. 20 Oct 2026.",
+      "displayName": "REF-CAC-Only",
+      "policyType": "custom",
+      "requirementsSatisfied": "mfa"
+    },
+    "builtInControls": [],
+    "customAuthenticationFactors": [],
+    "operator": "OR",
+    "termsOfUse": []
+  },
+  "sessionControls": null,
+  "state": "enabled"
+}

@@ -1,0 +1,68 @@
+{
+  "conditions": {
+    "applications": {
+      "applicationFilter": null,
+      "excludeApplications": [],
+      "includeApplications": [
+        "All"
+      ],
+      "includeAuthenticationContextClassReferences": [],
+      "includeUserActions": []
+    },
+    "authenticationFlows": null,
+    "clientApplications": null,
+    "clientAppTypes": [
+      "all"
+    ],
+    "devices": null,
+    "insiderRiskLevels": null,
+    "locations": null,
+    "platforms": null,
+    "servicePrincipalRiskLevels": [],
+    "signInRiskLevels": [],
+    "userRiskLevels": [],
+    "users": {
+      "excludeGroups": [],
+      "excludeGuestsOrExternalUsers": null,
+      "excludeRoles": [],
+      "excludeUsers": [],
+      "includeGroups": [],
+      "includeGuestsOrExternalUsers": null,
+      "includeRoles": [],
+      "includeUsers": [
+        "<dailyUser-from-config>"
+      ]
+    }
+  },
+  "deletedDateTime": null,
+  "displayName": "REF-CA-User-YubiKey-Only",
+  "grantControls": {
+    "authenticationStrength": {
+      "allowedCombinations": [
+        "fido2"
+      ],
+      "combinationConfigurations": [
+        {
+          "@odata.type": "#microsoft.graph.fido2CombinationConfiguration",
+          "allowedAAGUIDs": [
+            "73bb0cd4-e502-49b8-9c6f-b59445bf720b",
+            "85203421-48f9-4355-9bc8-8a53846e5083"
+          ],
+          "appliesToCombinations": [
+            "fido2"
+          ]
+        }
+      ],
+      "description": "Passkey on a YubiKey 5 FIPS (attested, allow-listed AAGUIDs) only. user. 20 Oct 2026.",
+      "displayName": "REF-YubiKey-Only",
+      "policyType": "custom",
+      "requirementsSatisfied": "mfa"
+    },
+    "builtInControls": [],
+    "customAuthenticationFactors": [],
+    "operator": "OR",
+    "termsOfUse": []
+  },
+  "sessionControls": null,
+  "state": "enabled"
+}

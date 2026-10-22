@@ -3,6 +3,12 @@
 #   <excludeUsers-from-config>              -> the break-glass account (always) and, where the definition had a second
 #                                              exclusion, the admin account (token protection: command-line tools cannot bind tokens)
 #   <excludeApplications-app-id-from-config> -> conditionalAccess.excludedAppIds in config.json (optional; empty if absent)
+#   <admin-from-config> / <dailyUser-from-config> -> accounts.admin / accounts.dailyUser (per-account policies such as
+#                                              REF-CA-Admin-CAC-Only and REF-CA-User-YubiKey-Only)
+#   authenticationStrength without an id   -> the custom strength with that displayName; created from the definition's
+#                                              allowedCombinations (+ FIDO2 AAGUID restriction) if it does not exist yet
+# ORDER for the per-account sign-in policies: register and TEST the method first (the CAC for the admin, the security key for the
+# daily user) - a strength the account cannot meet locks that account out once the policy is enabled.
 # Read-only without -Apply. Refuses duplicates by displayName. Switch a policy to 'enabled' only after reading the
 # report-only results in the sign-in logs (every evaluated sign-in shows reportOnlySuccess), never before - a Conditional
 # Access policy switched on before its own read is how you lock yourself out.
@@ -17,10 +23,12 @@ $def = Get-Content $Definition -Raw | ConvertFrom-Json -AsHashtable
 if ($Name) { $def.displayName = $Name }
 function UserId($upn) { (Invoke-MgGraphRequest -Method GET -Uri "https://graph.microsoft.com/v1.0/users/$upn`?`$select=id").id }
 $bg = UserId $global:Cfg.accounts.breakGlass; $adm = UserId $global:Cfg.accounts.admin
+$daily = $null; if (($def | ConvertTo-Json -Depth 30) -match '<dailyUser-from-config>') { $daily = UserId $global:Cfg.accounts.dailyUser }
 $u = $def.conditions.users
 if ($u) {
     foreach ($k in 'includeUsers', 'excludeUsers', 'includeGroups', 'excludeGroups') {
         if (-not $u[$k]) { continue }
+        $u[$k] = @($u[$k] | ForEach-Object { if ($_ -eq '<admin-from-config>') { $adm } elseif ($_ -eq '<dailyUser-from-config>') { $daily } else { $_ } })
         $ph = @($u[$k] | Where-Object { $_ -like '<*' }).Count; $real = @($u[$k] | Where-Object { $_ -notlike '<*' })
         if ($k -eq 'excludeUsers' -and $ph) { $u[$k] = @($real + $bg + $(if ($ph -ge 2) { $adm })) }
         elseif ($ph) { $u[$k] = @($real) }
@@ -33,6 +41,18 @@ $def.state = 'enabledForReportingButNotEnforced'
 $existing = @((Invoke-MgGraphRequest -Method GET -Uri $ca).value | Where-Object displayName -eq $def.displayName)
 Write-Output ("'{0}': state={1} users={2} excludeUsers={3} apps={4} platforms={5} clients={6} grant={7} session={8}" -f $def.displayName, $def.state, ($u.includeUsers -join ','), ($u.excludeUsers -join ','), ($ap.includeApplications -join ','), ($def.conditions.platforms.includePlatforms -join ','), ($def.conditions.clientAppTypes -join ','), ($def.grantControls.builtInControls -join ','), ($def.sessionControls.Keys -join ','))
 if ($existing.Count) { Write-Output "ALREADY EXISTS: id=$($existing[0].id) state=$($existing[0].state). Nothing created."; return }
+$as = $def.grantControls.authenticationStrength
+if ($as -and -not $as.id) {
+    $sp = 'https://graph.microsoft.com/beta/identity/conditionalAccess/authenticationStrength/policies'
+    $found = @((Invoke-MgGraphRequest -Method GET -Uri $sp).value | Where-Object displayName -eq $as.displayName)
+    Write-Output "authentication strength '$($as.displayName)' ($($as.allowedCombinations -join ', ')): $(if ($found) { "exists, id $($found[0].id)" } else { 'will be created' })"
+    if (-not $Apply) { Write-Output 'Read-only. Add -Apply to create (report-only).'; return }
+    if (-not $found) {
+        $new = Invoke-MgGraphRequest -Method POST -Uri $sp -Body (@{ displayName = $as.displayName; description = $as.description; allowedCombinations = @($as.allowedCombinations) } | ConvertTo-Json -Depth 10) -ContentType 'application/json'
+        foreach ($cc in @($as.combinationConfigurations)) { if ($cc) { Invoke-MgGraphRequest -Method POST -Uri "$sp/$($new.id)/combinationConfigurations" -Body ($cc | ConvertTo-Json -Depth 10) -ContentType 'application/json' | Out-Null } }
+        $found = @($new); Write-Output "  created authentication strength id $($new.id)" }
+    $def.grantControls.authenticationStrength = @{ id = $found[0].id }
+}
 if (-not $Apply) { Write-Output 'Read-only. Add -Apply to create (report-only).'; return }
 $r = Invoke-MgGraphRequest -Method POST -Uri $ca -Body ($def | ConvertTo-Json -Depth 30) -ContentType 'application/json'
 $rb = Invoke-MgGraphRequest -Method GET -Uri "$ca/$($r.id)"

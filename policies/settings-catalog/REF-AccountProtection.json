@@ -1,6 +1,6 @@
 {
   "name": "REF-AccountProtection",
-  "description": "",
+  "description": " | 20 Oct 2026: Windows Hello OFF everywhere - CAC/security key only, Security Officer 20 Oct 2026 (SANCTIR-Set-HelloOff.ps1)",
   "platforms": "windows10",
   "technologies": "mdm",
   "templateReference": {
@@ -38,39 +38,11 @@
                   "settingValueTemplateId": "92982814-15da-4812-8bbb-32c33f379651",
                   "useTemplateDefault": false
                 },
-                "value": "device_vendor_msft_passportforwork_{tenantid}_policies_usepassportforwork_true"
+                "value": "device_vendor_msft_passportforwork_{tenantid}_policies_usepassportforwork_false"
               },
               "settingDefinitionId": "device_vendor_msft_passportforwork_{tenantid}_policies_usepassportforwork",
               "settingInstanceTemplateReference": {
                 "settingInstanceTemplateId": "4023eea0-5289-42de-a970-9b5759460de4"
-              }
-            },
-            {
-              "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingInstance",
-              "settingDefinitionId": "device_vendor_msft_passportforwork_{tenantid}_policies_pincomplexity_minimumpinlength",
-              "settingInstanceTemplateReference": null,
-              "simpleSettingValue": {
-                "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
-                "settingValueTemplateReference": {
-                  "settingValueTemplateId": "b2cec844-c747-466e-ae20-92969da2a10c",
-                  "useTemplateDefault": false
-                },
-                "value": 6
-              }
-            },
-            {
-              "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
-              "choiceSettingValue": {
-                "children": [],
-                "settingValueTemplateReference": {
-                  "settingValueTemplateId": "c36f290a-cac2-4a0b-96b8-596a75e4890d",
-                  "useTemplateDefault": false
-                },
-                "value": "device_vendor_msft_passportforwork_{tenantid}_policies_requiresecuritydevice_true"
-              },
-              "settingDefinitionId": "device_vendor_msft_passportforwork_{tenantid}_policies_requiresecuritydevice",
-              "settingInstanceTemplateReference": {
-                "settingInstanceTemplateId": "04df0c8b-5d87-494e-865e-6bfeef5a24a5"
               }
             }
           ],
