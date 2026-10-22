@@ -9,6 +9,8 @@ configbackup/
 *.log
 *.evtx
 *.csv
+# ...except data a remediation builder reads (the Office STIG registry table)
+!remediations/**/*.csv
 *.html
 
 # local scratch
