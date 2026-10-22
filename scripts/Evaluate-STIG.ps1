@@ -18,17 +18,63 @@
 # Unelevated it refuses, unless -AllowPartial is given (rules that need elevation then report 'error').
 
 param(
-    [Parameter(Mandatory)] [ValidateSet('WS01', 'WS02')] [string]$Machine,
-    [string]$Benchmark = 'C:\Users\SecurityOfficer\OneDrive - Sanctir\02 Compliance & IT\Compliance Library\DISA-STIG\Windows_11_V2R8\U_MS_Windows_11_V2R8_STIG_SCAP_1-3_Benchmark.xml',
+    [string]$Machine = $env:COMPUTERNAME,
+    # 18 Oct 2026: default moved from V2R8 to V2R11 (30 Sep 2026), the current DISA release; V2R8 stays in the library for history
+    [Parameter(Mandatory)] [string]$Benchmark,   # path to a DISA SCAP 1.2/1.3 benchmark XML (public.cyber.mil > SCAP Benchmarks)
     [string]$ProfileId = 'MAC-2_Sensitive',
-    [string]$EvidenceRoot = (Join-Path (Split-Path -Parent $PSScriptRoot) 'Evidence'),
+    [string]$EvidenceRoot = (Join-Path (Get-Location) 'Evidence'),
     [switch]$AllowPartial,
-    [switch]$NoFiles
+    [switch]$NoFiles,
+    # 20 Oct 2026: HKEY_CURRENT_USER rules (Office, some Windows) are read from THIS profile's hive, not from whoever runs the
+    # scan - since 18 Oct the elevated scan runs in admin's own session, whose HKCU is not the daily user's.
+    # The profile must be signed in (its hive loaded). '' = the account running the scan.
+    [string]$UserProfile = ''   # the DAILY user's profile folder name (C:\Users\<name>); empty = the account running the scan
 )
 $ErrorActionPreference = 'Stop'
 if ($env:COMPUTERNAME -ne $Machine) { throw "This is ${env:COMPUTERNAME}, not $Machine. Nothing run." }
 $script:Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if (-not $script:Elevated -and -not $AllowPartial) { throw 'Not elevated. Open the elevated window (REF-la) and run again, or pass -AllowPartial for a partial result. Nothing run.' }
+if (-not $script:Elevated -and -not $AllowPartial) { throw 'Not elevated. Run it from admin''s own session (Switch user > PowerShell 7 > Run as administrator), or pass -AllowPartial for a partial result. Nothing run.' }
+# 20 Oct 2026: HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Policy Manager (where Defender mirrors Intune's settings, and
+# where DISA's own Defender checks look) denies read even to Administrators. When elevated, a key refused that way is opened
+# READ-ONLY with backup semantics (SeBackupPrivilege, which Administrators hold; KEY_READ, nothing written).
+if (-not ('RefBackupReg' -as [type])) {
+    Add-Type -TypeDefinition @'
+using System; using System.Runtime.InteropServices; using Microsoft.Win32; using Microsoft.Win32.SafeHandles;
+public static class RefBackupReg {
+    [DllImport("advapi32.dll", CharSet = CharSet.Unicode)] static extern int RegOpenKeyEx(IntPtr hKey, string subKey, int options, int samDesired, out IntPtr result);
+    [DllImport("advapi32.dll", SetLastError = true)] static extern bool OpenProcessToken(IntPtr process, int access, out IntPtr token);
+    [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)] static extern bool LookupPrivilegeValue(string system, string name, out long luid);
+    [StructLayout(LayoutKind.Sequential, Pack = 4)] struct TokenPrivileges { public int Count; public long Luid; public int Attributes; }
+    [DllImport("advapi32.dll", SetLastError = true)] static extern bool AdjustTokenPrivileges(IntPtr token, bool disableAll, ref TokenPrivileges state, int length, IntPtr previous, IntPtr returnLength);
+    [DllImport("kernel32.dll")] static extern IntPtr GetCurrentProcess();
+    [DllImport("kernel32.dll")] static extern bool CloseHandle(IntPtr handle);
+    static bool enabled;
+    public static RegistryKey OpenLocalMachine(string path) {
+        if (!enabled) {
+            IntPtr token; if (!OpenProcessToken(GetCurrentProcess(), 0x28, out token)) { throw new Exception("OpenProcessToken failed"); }
+            long luid; LookupPrivilegeValue(null, "SeBackupPrivilege", out luid);
+            TokenPrivileges tp = new TokenPrivileges(); tp.Count = 1; tp.Luid = luid; tp.Attributes = 2;
+            bool ok = AdjustTokenPrivileges(token, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero); int err = Marshal.GetLastWin32Error(); CloseHandle(token);
+            if (!ok || err != 0) { throw new Exception("SeBackupPrivilege is not available to this account (" + err + ")"); }
+            enabled = true;
+        }
+        IntPtr h; int rc = RegOpenKeyEx(new IntPtr(unchecked((int)0x80000002)), path, 4 /* REG_OPTION_BACKUP_RESTORE */, 0x20119 /* KEY_READ | KEY_WOW64_64KEY */, out h);
+        if (rc == 2) { return null; }
+        if (rc != 0) { throw new Exception("read with backup semantics failed (" + rc + ")"); }
+        return RegistryKey.FromHandle(new SafeRegistryHandle(h, true), RegistryView.Registry64);
+    }
+}
+'@
+}
+$script:BackupReads = New-Object 'Collections.Generic.HashSet[string]'
+$script:HkcuSid = $null; $script:HkcuNote = 'HKCU = the account running the scan'
+if ($UserProfile) {
+    $pl = Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList' | Where-Object { (Get-ItemProperty $_.PSPath).ProfileImagePath -match ('\\' + [regex]::Escape($UserProfile) + '$') } | Select-Object -First 1
+    if (-not $pl) { throw "Profile '$UserProfile' not found on this machine. Pass -UserProfile '' to read the running account's HKCU. Nothing run." }
+    $sid = $pl.PSChildName
+    if (-not (Test-Path "Registry::HKEY_USERS\$sid")) { throw "Profile '$UserProfile' is not signed in (its registry hive is not loaded), so its user settings cannot be read. Sign it in (Switch user) and run again. Nothing run." }
+    $script:HkcuSid = $sid; $script:HkcuNote = "HKCU = profile $UserProfile ($sid)"
+}
 if (-not (Test-Path $Benchmark)) { throw "Benchmark not found: $Benchmark" }
 if ($Benchmark -match 'enhanced') { throw 'That is not the DISA-published benchmark file.' }
 
@@ -149,8 +195,24 @@ function Get-OvalComponentValues($comp) {
         default { throw "variable component '$($comp.LocalName)' not supported" }
     }
 }
+# external_variable (20 Oct 2026; the Firewall V2R3 benchmark uses them): the value comes from the XCCDF <Value> the rule
+# exports to it - the profile's refine-value selector if it has one, otherwise the Value's default (no selector).
+$script:ExportMap = $null
+function Get-XccdfExportValue($varId) {
+    if ($null -eq $script:ExportMap) { $script:ExportMap = @{}; foreach ($ce in $bench.SelectNodes('.//x:check-export', $nsm)) { $script:ExportMap[$ce.GetAttribute('export-name')] = $ce.GetAttribute('value-id') } }
+    $valId = $script:ExportMap[$varId]; if (-not $valId) { throw "external variable $varId is not exported by any rule" }
+    $valNode = $bench.SelectSingleNode(".//x:Value[@id='$valId']", $nsm); if (-not $valNode) { throw "XCCDF Value $valId not found" }
+    $sel = $null; if ($prof) { $rv = $prof.SelectSingleNode("x:refine-value[@idref='$valId']", $nsm); if ($rv) { $sel = $rv.GetAttribute('selector') } }
+    $cands = @($valNode.SelectNodes('x:value', $nsm))
+    $pick = if ($sel) { $cands | Where-Object { $_.GetAttribute('selector') -eq $sel } | Select-Object -First 1 } else { $null }
+    if (-not $pick) { $pick = $cands | Where-Object { -not $_.HasAttribute('selector') } | Select-Object -First 1 }
+    if (-not $pick) { $pick = $cands | Select-Object -First 1 }
+    if (-not $pick) { throw "XCCDF Value $valId has no value" }
+    return , @($pick.InnerText)
+}
 function Resolve-OvalVar($id) {
-    if (-not $script:VarCache.ContainsKey($id)) { $v = $Vars[$id]; if (-not $v) { throw "variable $id not found" }; $script:VarCache[$id] = @(Get-OvalComponentValues @(ElementKids $v)[0]) }
+    if (-not $script:VarCache.ContainsKey($id)) { $v = $Vars[$id]; if (-not $v) { throw "variable $id not found" }
+        $script:VarCache[$id] = if ($v.LocalName -eq 'external_variable') { @(Get-XccdfExportValue $id) } else { @(Get-OvalComponentValues @(ElementKids $v)[0]) } }
     return $script:VarCache[$id]
 }
 
@@ -171,11 +233,27 @@ function ConvertTo-RegItem($hiveName, $keyPath, $key, $name) {
     $it['hive'] = @($hiveName); $it['key'] = @($keyPath); $it['name'] = @($name); $it['type'] = @($type); $it['value'] = $vals
     return $it
 }
+# DISA-documented Intune (CSP) locations - used ONLY in the second pass below, ONLY for the rules DISA's own
+# "Intune STIG Deviations and Unsupported Settings" sheet (Intune Policy Package, Oct 2026, file 8) lists as
+# "False Positive. This is set via CSP, while SCAP is looking at the legacy registry location", and ONLY at the
+# location that sheet names. DISA's OVAL state (the required value) is unchanged; only where it is read moves.
+$script:KeyRewrite = $null
+function Get-RewrittenKey($p) { if ($script:KeyRewrite) { foreach ($rw in $script:KeyRewrite) { if ($p -match $rw[0]) { return ($p -replace $rw[0], $rw[1]) } } }; return $p }
 function Get-RegistryItems($obj) {
     $items = New-Object Collections.ArrayList
     $hiveName = (Kid $obj 'hive').InnerText; $keyNode = Kid $obj 'key'; $nameNode = Kid $obj 'name'; $beh = Kid $obj 'behaviors'
-    $hive = if ($hiveName -eq 'HKEY_LOCAL_MACHINE') { [Microsoft.Win32.RegistryHive]::LocalMachine } elseif ($hiveName -eq 'HKEY_CURRENT_USER') { [Microsoft.Win32.RegistryHive]::CurrentUser } elseif ($hiveName -eq 'HKEY_USERS') { [Microsoft.Win32.RegistryHive]::Users } else { throw "hive $hiveName not supported" }
+    $pre = ''   # HKCU rules read the chosen daily-user profile under HKEY_USERS\<sid> (see -UserProfile)
+    $hive = if ($hiveName -eq 'HKEY_LOCAL_MACHINE') { [Microsoft.Win32.RegistryHive]::LocalMachine } elseif ($hiveName -eq 'HKEY_CURRENT_USER') { if ($script:HkcuSid) { $pre = "$($script:HkcuSid)\"; [Microsoft.Win32.RegistryHive]::Users } else { [Microsoft.Win32.RegistryHive]::CurrentUser } } elseif ($hiveName -eq 'HKEY_USERS') { [Microsoft.Win32.RegistryHive]::Users } else { throw "hive $hiveName not supported" }
     $base = [Microsoft.Win32.RegistryKey]::OpenBaseKey($hive, [Microsoft.Win32.RegistryView]::Registry64)
+    $open = { param($p)
+        $full = if ($pre) { if ($p) { $pre + $p } else { $pre.TrimEnd('\') } } else { $p }
+        try { $base.OpenSubKey($full) }
+        catch {
+            $ex = $_.Exception; while ($ex.InnerException) { $ex = $ex.InnerException }
+            if (($ex -is [Security.SecurityException] -or $ex -is [UnauthorizedAccessException]) -and $script:Elevated -and $hiveName -eq 'HKEY_LOCAL_MACHINE') { [void]$script:BackupReads.Add($full); [RefBackupReg]::OpenLocalMachine($full) }
+            else { throw }
+        }
+    }
     try {
         $keyOp = AttrOr $keyNode 'operation' 'equals'; $keyPaths = New-Object Collections.ArrayList
         if ($keyOp -eq 'pattern match') {
@@ -184,20 +262,30 @@ function Get-RegistryItems($obj) {
             $prefix = ($literal -replace '\\\\', '\'); $cut = $prefix.LastIndexOf('\'); if ($cut -ge 0) { $prefix = $prefix.Substring(0, $cut) } else { $prefix = '' }
             $stack = New-Object Collections.Stack; $stack.Push(@($prefix, 0))
             while ($stack.Count) {
-                $cur = $stack.Pop(); $k = $base.OpenSubKey($cur[0]); if (-not $k) { continue }
+                $cur = $stack.Pop(); $k = & $open $cur[0]; if (-not $k) { continue }
                 try { if ($cur[0] -and [regex]::IsMatch($cur[0], $pattern, 'IgnoreCase')) { [void]$keyPaths.Add($cur[0]) }
                       if ($cur[1] -lt 4) { foreach ($s in $k.GetSubKeyNames()) { $stack.Push(@($(if ($cur[0]) { "$($cur[0])\$s" } else { $s }), ($cur[1] + 1))) } } } finally { $k.Close() }
             }
         } else {
-            [void]$keyPaths.Add($keyNode.InnerText)
+            $kt = Get-RewrittenKey $keyNode.InnerText
+            if ($kt -match '::') {
+                # Defender CSP keeps "threat level=action" pairs in ONE string value (Policy Manager!ThreatSeverityDefaultAction);
+                # Group Policy keeps one value per level under Threats\ThreatSeverityDefaultAction. Present each pair as that value.
+                $kk, $vn = $kt -split '::', 2; $k = & $open $kk
+                if ($k) { try { $raw = "$($k.GetValue($vn))"
+                    foreach ($pair in ($raw -split '[|;,]')) { $lv, $ac = $pair -split '=', 2
+                        if ($null -ne $ac -and $nameNode -and $lv.Trim() -ieq $nameNode.InnerText) { $it = New-Item2 "$hiveName|$($kk.ToLower())|$vn|$($lv.Trim())" "$kk\$vn = '$raw' (level $($lv.Trim()) -> action $($ac.Trim()))"; $it['hive'] = @($hiveName); $it['key'] = @($keyNode.InnerText); $it['name'] = @($nameNode.InnerText); $it['type'] = @('reg_sz'); $it['value'] = @($ac.Trim()); [void]$items.Add($it) } } } finally { $k.Close() } }
+                return $items
+            }
+            [void]$keyPaths.Add($kt)
             if ($beh -and $beh.GetAttribute('recurse_direction') -eq 'down') {
-                $k = $base.OpenSubKey($keyNode.InnerText); if ($k) { try { foreach ($s in $k.GetSubKeyNames()) { [void]$keyPaths.Add("$($keyNode.InnerText)\$s") } } finally { $k.Close() } }
+                $k = & $open $kt; if ($k) { try { foreach ($s in $k.GetSubKeyNames()) { [void]$keyPaths.Add("$kt\$s") } } finally { $k.Close() } }
             }
         }
         $nameNil = ($nameNode -and $nameNode.GetAttribute('nil', 'http://www.w3.org/2001/XMLSchema-instance') -eq 'true')
         $nameOp = AttrOr $nameNode 'operation' 'equals'
         foreach ($kp in $keyPaths) {
-            $k = $base.OpenSubKey($kp); if (-not $k) { continue }
+            $k = & $open $kp; if (-not $k) { continue }
             try {
                 if ($nameNil) { $it = New-Item2 "$hiveName|$($kp.ToLower())|" "$kp (key exists)"; $it['hive'] = @($hiveName); $it['key'] = @($kp); [void]$items.Add($it); continue }
                 $valueNames = @($k.GetValueNames())
@@ -222,9 +310,9 @@ function Get-NtuserItems($obj) {
             $it['sid'] = @($sid); $it['username'] = @(Split-Path $path -Leaf); $it['enabled'] = @("$enabled".ToLower()); $it['days_since_modified'] = @("$days"); $it['key'] = @($keyPath); $it['name'] = @($name)
             $hk = $users.OpenSubKey($sid); $mount = $sid; $loadedHere = $false
             # 10 Oct 2026: when elevated, an unloaded profile is loaded read-only for the check and unloaded again, so the result
-            # no longer depends on which administrator runs the scan (6 Oct ran as REF-la, 10 Oct as admin).
+            # no longer depends on which administrator runs the scan (6 Oct ran as la-admin, 10 Oct as admin).
             if (-not $hk -and $script:Elevated -and (Test-Path -LiteralPath $dat)) {
-                $mount = "SANCTIR_EVAL_$($sid -replace '[^0-9]', '')"
+                $mount = "REF_EVAL_$($sid -replace '[^0-9]', '')"
                 & reg.exe load "HKU\$mount" "$dat" 2>&1 | Out-Null
                 if ($LASTEXITCODE -eq 0) { $loadedHere = $true; $hk = $users.OpenSubKey($mount) }
             }
@@ -273,7 +361,7 @@ $script:SecPol = $null
 function Get-SecPol {
     if (-not $script:SecPol) {
         if (-not $script:Elevated) { throw 'user rights and account policy need elevation (secedit)' }
-        $tmp = Join-Path $env:TEMP ("REF-secpol-{0}.inf" -f ([guid]::NewGuid().ToString('N')))
+        $tmp = Join-Path $env:TEMP ("sanctir-secpol-{0}.inf" -f ([guid]::NewGuid().ToString('N')))
         try {
             $o = & secedit.exe /export /cfg $tmp /areas SECURITYPOLICY USER_RIGHTS 2>&1; if ($LASTEXITCODE -ne 0) { throw "secedit failed: $($o -join ' ')" }
             $sections = @{}; $cur = ''
@@ -318,11 +406,36 @@ function Get-AccessTokenItems($obj) {
     }
     return $items
 }
+# 18 Oct 2026: Windows 11 STIG V2R11 checks user rights with userright_object (V2R8 used accesstoken_object). The object
+# names the right by its Windows constant; one item per holder (trustee_name as Windows shows it, trustee_sid), or a single
+# item with an empty trustee_name when nobody holds the right - which is what DISA's "<trustee_name />" state expects.
+$script:RightConst = @{ SE_BACKUP_NAME = 'SeBackupPrivilege'; SE_CREATE_GLOBAL_NAME = 'SeCreateGlobalPrivilege'; SE_CREATE_PAGEFILE_NAME = 'SeCreatePagefilePrivilege'
+    SE_CREATE_PERMANENT_NAME = 'SeCreatePermanentPrivilege'; SE_CREATE_SYMBOLIC_LINK_NAME = 'SeCreateSymbolicLinkPrivilege'; SE_CREATE_TOKEN_NAME = 'SeCreateTokenPrivilege'
+    SE_DEBUG_NAME = 'SeDebugPrivilege'; SE_DENY_BATCH_LOGON_NAME = 'SeDenyBatchLogonRight'; SE_DENY_INTERACTIVE_LOGON_NAME = 'SeDenyInteractiveLogonRight'
+    SE_DENY_NETWORK_LOGON_NAME = 'SeDenyNetworkLogonRight'; SE_DENY_REMOTE_INTERACTIVE_LOGON_NAME = 'SeDenyRemoteInteractiveLogonRight'; SE_DENY_SERVICE_LOGON_NAME = 'SeDenyServiceLogonRight'
+    SE_ENABLE_DELEGATION_NAME = 'SeEnableDelegationPrivilege'; SE_IMPERSONATE_NAME = 'SeImpersonatePrivilege'; SE_INTERACTIVE_LOGON_NAME = 'SeInteractiveLogonRight'
+    SE_LOAD_DRIVER_NAME = 'SeLoadDriverPrivilege'; SE_LOCK_MEMORY_NAME = 'SeLockMemoryPrivilege'; SE_MANAGE_VOLUME_NAME = 'SeManageVolumePrivilege'
+    SE_NETWORK_LOGON_NAME = 'SeNetworkLogonRight'; SE_PROF_SINGLE_PROCESS_NAME = 'SeProfileSingleProcessPrivilege'; SE_REMOTE_SHUTDOWN_NAME = 'SeRemoteShutdownPrivilege'
+    SE_RESTORE_NAME = 'SeRestorePrivilege'; SE_SECURITY_NAME = 'SeSecurityPrivilege'; SE_SYSTEM_ENVIRONMENT_NAME = 'SeSystemEnvironmentPrivilege'
+    SE_SYSTEMTIME_NAME = 'SeSystemtimePrivilege'; SE_TAKE_OWNERSHIP_NAME = 'SeTakeOwnershipPrivilege'; SE_TCB_NAME = 'SeTcbPrivilege'
+    SE_TRUSTED_CREDMAN_ACCESS_NAME = 'SeTrustedCredManAccessPrivilege'; SE_REMOTE_INTERACTIVE_LOGON_NAME = 'SeRemoteInteractiveLogonRight'; SE_INCREASE_QUOTA_NAME = 'SeIncreaseQuotaPrivilege' }
+function Get-UserRightItems($obj) {
+    $items = New-Object Collections.ArrayList; $c = (Kid $obj 'userright').InnerText.Trim()
+    $right = $script:RightConst[$c]; if (-not $right) { throw "user right constant $c not mapped" }
+    $rights = (Get-SecPol)['Privilege Rights']; $holders = if ($rights.ContainsKey($right)) { @($rights[$right] -split ',' | Where-Object { $_.Trim() }) } else { @() }
+    if (-not $holders.Count) { $it = New-Item2 "userright|$right|none" "$right held by: (nobody)"; $it['userright'] = @($c); $it['trustee_name'] = @(''); $it['trustee_sid'] = @(''); [void]$items.Add($it); return $items }
+    foreach ($h in $holders) {
+        $name = ConvertTo-PrincipalName $h; $sid = try { if ($h.Trim().StartsWith('*')) { $h.Trim().Substring(1) } else { (New-Object Security.Principal.NTAccount($h.Trim())).Translate([Security.Principal.SecurityIdentifier]).Value } } catch { '' }
+        $it = New-Item2 "userright|$right|$($name.ToLower())" "$right held by: $name"; $it['userright'] = @($c); $it['trustee_name'] = @($name); $it['trustee_sid'] = @($sid); [void]$items.Add($it)
+    }
+    return $items
+}
 function Get-WmiItems($obj) {
     $items = New-Object Collections.ArrayList; $nsName = (Kid $obj 'namespace').InnerText; $wql = (Kid $obj 'wql').InnerText
     $rows = @(Get-CimInstance -Namespace $nsName -Query $wql -ErrorAction Stop); $i = 0
     foreach ($r in $rows) {
-        $rec = @{}; foreach ($p in $r.CimInstanceProperties) { if ($null -ne $p.Value) { $rec[$p.Name.ToLower()] = @(@($p.Value) | ForEach-Object { "$_" }) } }
+        # 18 Oct 2026: WMI booleans are reported as 1/0 (V2R11 TPM rules compare IsEnabled_InitialValue etc. with 1; Windows returns True)
+        $rec = @{}; foreach ($p in $r.CimInstanceProperties) { if ($null -ne $p.Value) { $rec[$p.Name.ToLower()] = @(@($p.Value) | ForEach-Object { if ($_ -is [bool]) { if ($_) { '1' } else { '0' } } else { "$_" } }) } }
         $it = New-Item2 "wmi|$nsName|$wql|$i" (($rec.Keys | Sort-Object | ForEach-Object { "$_=$($rec[$_] -join ',')" }) -join '; '); $it['result'] = $rec; [void]$items.Add($it); $i++
     }
     return $items
@@ -350,6 +463,8 @@ function Get-AccountPolicyItem($kind) {
         $max = Num 'MaximumPasswordAge' 0; $it['max_passwd_age'] = @($(if ($max -lt 0) { '4294967295' } else { "$($max * 86400)" }))
         $it['min_passwd_age'] = @("$((Num 'MinimumPasswordAge' 0) * 86400)"); $it['min_passwd_len'] = @("$(Num 'MinimumPasswordLength' 0)"); $it['password_hist_len'] = @("$(Num 'PasswordHistorySize' 0)")
         $it['password_complexity'] = @("$(Num 'PasswordComplexity' 0)"); $it['reversible_encryption'] = @("$(Num 'ClearTextPassword' 0)")
+        # 18 Oct 2026: V2R11 checks "Allow anonymous SID/Name translation" through the password-policy object (anonymous_name_lookup)
+        $it['anonymous_name_lookup'] = @("$(Num 'LSAAnonymousNameLookup' 0)")
         $it['_show'] = "max age $max d; min age $(Num 'MinimumPasswordAge' 0) d; min length $(Num 'MinimumPasswordLength' 0); history $(Num 'PasswordHistorySize' 0); complexity $(Num 'PasswordComplexity' 0); reversible $(Num 'ClearTextPassword' 0)"
     } else {
         $it = New-Item2 'lockoutpolicy' ''
@@ -408,6 +523,7 @@ function Get-OvalItems($id) {
                 'ntuser_object' { , (Get-NtuserItems $obj) }
                 'auditeventpolicysubcategories_object' { , (Get-AuditItems) }
                 'accesstoken_object' { , (Get-AccessTokenItems $obj) }
+        'userright_object' { , (Get-UserRightItems $obj) }
                 'wmi57_object' { , (Get-WmiItems $obj) }
                 'fileeffectiverights53_object' { , (Get-FileRightsItems $obj) }
                 'passwordpolicy_object' { , (Get-AccountPolicyItem 'password') }
@@ -553,6 +669,31 @@ foreach ($rule in $rules) {
         Title = ($rule.SelectSingleNode('x:title', $nsm).InnerText -replace '\s+', ' '); Finding = $why; Mdm = $(if ($result -ne 'pass') { Get-MdmEquivalent $leaves } else { '' }); Rule = ($rid -replace '.*rule_', '')
     })
 }
+# ---------- second pass: DISA-documented Intune (CSP) locations ----------
+# Rules DISA itself marks as SCAP false positives on Intune-managed devices (deviations sheet, file 8), with the location
+# it names. A rule that fails or errors at the legacy path is re-read there; DISA's required value is unchanged.
+# Firewall "outbound must be allowed" rules are listed too: our outbound default is Block (stricter), so they still fail.
+$fwRw = @(@('(?i)^SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile$', 'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\Mdm\DomainProfile'),
+          @('(?i)^SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\PrivateProfile$', 'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\Mdm\StandardProfile'),
+          @('(?i)^SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\PublicProfile$', 'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\Mdm\PublicProfile'))
+$avRw = @(, @('(?i)^Software\\Policies\\Microsoft\\Windows Defender(\\(?!Policy Manager)[^\\]+)*$', 'SOFTWARE\Policies\Microsoft\Windows Defender\Policy Manager'))
+$thRw = @(, @('(?i)^Software\\Policies\\Microsoft\\Windows Defender\\Threats\\ThreatSeverityDefaultAction$', 'SOFTWARE\Policies\Microsoft\Windows Defender\Policy Manager::ThreatSeverityDefaultAction'))
+$CspAlt = @{
+    'V-241992' = $fwRw; 'V-241993' = $fwRw; 'V-241997' = $fwRw; 'V-241998' = $fwRw; 'V-242002' = $fwRw; 'V-242003' = $fwRw
+    'V-213426' = $avRw; 'V-213435' = $avRw; 'V-213463' = $avRw
+    'V-213455' = $thRw; 'V-213464' = $thRw; 'V-213465' = $thRw; 'V-213466' = $thRw
+}
+$cspPassed = 0
+foreach ($r in @($out | Where-Object { $_.Result -in 'fail', 'error' -and $CspAlt.ContainsKey($_.Vuln) })) {
+    $rule = $rules | Where-Object { ($_.GetAttribute('id') -replace '.*rule_', '') -eq $r.Rule } | Select-Object -First 1; if (-not $rule) { continue }
+    $defId = $rule.SelectSingleNode('x:check/x:check-content-ref', $nsm).GetAttribute('name')
+    $script:ObjCache = @{}; $script:TestCache = @{}; $script:DefCache = @{}; $script:KeyRewrite = $CspAlt[$r.Vuln]
+    try { $leaves2 = New-Object Collections.ArrayList; $alt = try { Get-OvalDefResult $defId $leaves2 } catch { 'error' } }
+    finally { $script:KeyRewrite = $null; $script:ObjCache = @{}; $script:TestCache = @{}; $script:DefCache = @{} }
+    $seen = @($leaves2 | Select-Object -First 2 | ForEach-Object { $_.Found }) -join ' ## '
+    if ($alt -eq 'true') { $r.Result = 'pass'; $cspPassed++; $r.Finding = "PASS at the DISA-documented Intune (CSP) location (Intune STIG Deviations sheet): $seen" }
+    else { $r.Finding = "$($r.Finding) ## $(if ($alt -eq 'false') { 'also not met' } else { 'not confirmed (could not be read)' }) at the DISA-documented Intune (CSP) location: $seen" }
+}
 $counts = @{}; foreach ($g in ($out | Group-Object Result)) { $counts[$g.Name] = $g.Count }
 function C($k) { if ($counts.ContainsKey($k)) { $counts[$k] } else { 0 } }
 $scored = (C 'pass') + (C 'fail') + (C 'error') + (C 'unknown'); $score = if ($scored) { [math]::Round(100.0 * (C 'pass') / $scored, 2) } else { 0 }
@@ -564,7 +705,9 @@ $lines = New-Object Collections.ArrayList
 [void]$lines.Add("        score over rules that could be decided (pass+fail): $scoreDecided | by severity, failed: high=$(@($out | Where-Object { $_.Result -eq 'fail' -and $_.Severity -eq 'high' }).Count) medium=$(@($out | Where-Object { $_.Result -eq 'fail' -and $_.Severity -eq 'medium' }).Count) low=$(@($out | Where-Object { $_.Result -eq 'fail' -and $_.Severity -eq 'low' }).Count)")
 $mdmFails = @($out | Where-Object { $_.Result -eq 'fail' -and $_.Mdm }).Count
 [void]$lines.Add("        failures with a same-named MDM-store value (check by hand; may be the setting delivered by Intune): $mdmFails of $(C 'fail')")
-[void]$lines.Add("        evaluated by REF-Eval-STIG.ps1 (PowerShell OVAL evaluation of DISA's benchmark content; not SCC) | $($started.ToString('yyyy-MM-dd HH:mm')) | $([int]((Get-Date) - $started).TotalSeconds) s | user elevated=$($script:Elevated)")
+if ($script:BackupReads.Count) { [void]$lines.Add("        read-only with backup semantics (key denies normal read to Administrators): $(@($script:BackupReads) -join '; ')") }
+if ($cspPassed) { [void]$lines.Add("        of the passes, $cspPassed read at the DISA-documented Intune (CSP) location (DISA lists these as SCAP false positives on Intune devices)") }
+[void]$lines.Add("        evaluated by REF-Eval-STIG.ps1 (PowerShell OVAL evaluation of DISA's benchmark content; not SCC) | $($started.ToString('yyyy-MM-dd HH:mm')) | $([int]((Get-Date) - $started).TotalSeconds) s | user elevated=$($script:Elevated) | $($script:HkcuNote)")
 [void]$lines.Add('')
 foreach ($grp in 'fail', 'error', 'unknown') {
     $set = @($out | Where-Object Result -eq $grp | Sort-Object @{ e = { @{ high = 0; medium = 1; low = 2 }[$_.Severity] } }, StigId)
@@ -573,7 +716,9 @@ foreach ($grp in 'fail', 'error', 'unknown') {
 $lines | ForEach-Object { $_ }
 if (-not $NoFiles) {
     $dest = Join-Path $EvidenceRoot ("{0}\stig-eval-{1}" -f (Get-Date -Format 'yyyy-MM-dd'), $Machine.ToLower()); New-Item -ItemType Directory -Force $dest | Out-Null
-    $stamp = Get-Date -Format 'HHmmss'
+    # Windows 11 keeps the original names; other benchmarks get a short tag so several can share the folder.
+    $tag = if ($bmId -match 'Windows_11') { '' } else { (($bmId -split ' ')[0] -replace '^(MS_|Microsoft_)', '' -replace '_STIG$', '' -replace '[^\w]', '').ToLower() + '-' }
+    $stamp = $tag + (Get-Date -Format 'HHmmss')
     [IO.File]::WriteAllLines((Join-Path $dest "summary-$stamp.txt"), [string[]]$lines, (New-Object Text.UTF8Encoding($false)))
     $out | Export-Csv (Join-Path $dest "results-$stamp.csv") -NoTypeInformation -Encoding UTF8
     "evidence: $dest (summary-$stamp.txt, results-$stamp.csv)"

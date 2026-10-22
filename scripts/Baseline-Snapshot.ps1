@@ -92,4 +92,6 @@ foreach ($k in $changed) {
 W "RESULT: $($cur.Count) objects now, $($base.Count) in baseline | added $($added.Count) | removed $($removed.Count) | changed $($changed.Count)"
 if ($added.Count + $removed.Count + $changed.Count) { W 'Every difference must match an approved entry in your change register; anything else is unauthorised drift and goes to incident response. Approved changes: export a new baseline and record it.' }
 $f = New-EvidenceFile 'baseline-drift'; [IO.File]::WriteAllLines($f, [string[]]$out); "written: $f"
-if ($added.Count + $removed.Count + $changed.Count) { exit 1 }
+# 'exit 1' closed the admin window when the script was run as a scriptblock, and anything queued after it never ran (21 Oct 2026).
+# The result is returned in $LASTEXITCODE instead.
+if ($added.Count + $removed.Count + $changed.Count) { $global:LASTEXITCODE = 1; return }
