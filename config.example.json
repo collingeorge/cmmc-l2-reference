@@ -27,6 +27,10 @@
     "clientApp": "14d82eec-204b-4c2f-b7e8-296a70dab67e",
     "_clientAppNote": "Microsoft Graph Command Line Tools (first-party public client). Restrict it to the admin accounts with 'assignment required'; it cannot bind tokens, so exclude the admin account from any token-protection policy or use another client."
   },
+  "conditionalAccess": {
+    "excludedAppIds": [],
+    "_note": "App (client) ids to exclude from the sign-in-frequency policy, if any. Leave empty unless a specific first-party tool needs it."
+  },
   "contact": {
     "securityOfficer": "security@example.com",
     "timeZone": "America/Los_Angeles"
